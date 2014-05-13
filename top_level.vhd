@@ -3,53 +3,59 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 ---------------------------------------------------------------------
 entity top_level is
-    Port( clk1 : in  STD_LOGIC;
-    	  clk2 : in  STD_LOGIC;
-    	  fi1  : out STD_LOGIC;
-    	  fi2  : out STD_LOGIC
+    Port( clk : in  STD_LOGIC
     );
 end top_level;
 ---------------------------------------------------------------------
-architecture Behavioral of top_level is
-component sm
-    Port( clk  : in  STD_LOGIC;
-    	  trig : in  STD_LOGIC;
-    	  fi   : out STD_LOGIC
+architecture behavioral of top_level is
+component cpu
+    Port( clk : in  STD_LOGIC;
+	  --data : inout STD_LOGIC_VECTOR(11 downto 0);
+	  --addr : out STD_LOGIC_VECTOR(11 downto 0);
+	  din : in STD_LOGIC_VECTOR(11 downto 0);
+	  dout : out STD_LOGIC_VECTOR(11 downto 0);
+	  addr : out STD_LOGIC_VECTOR(11 downto 0);
+	  mem_read : out STD_LOGIC;
+	  mem_write : out STD_LOGIC;
+	  mem_valid : in STD_LOGIC;
+	  en_and : in  STD_LOGIC;
+	  skip   : out STD_LOGIC
     );
 end component;
 
-signal trig1,     trig2     : STD_LOGIC := '0';
-signal trig1_mid, trig2_mid : STD_LOGIC := '0';
-signal fi1_int,   fi2_int   : STD_LOGIC;
+component mem
+    Port( clk : in  STD_LOGIC;
+	  din : in STD_LOGIC_VECTOR(11 downto 0);
+	  dout : out STD_LOGIC_VECTOR(11 downto 0);
+	  addr : in STD_LOGIC_VECTOR(11 downto 0);
+	  mem_read : in  STD_LOGIC;
+	  mem_write : in  STD_LOGIC;
+	  mem_valid : out  STD_LOGIC
+    );
+end component;
+
+signal data_mem_to_cpu, data_cpu_to_mem, addr : STD_LOGIC_VECTOR(11 downto 0);
+signal mem_read, mem_write, mem_valid : STD_LOGIC;
 begin
-	sm1 : sm Port Map(
-		clk => clk1,
-		trig => trig1,
-		fi => fi1_int
+	inst_cpu: cpu Port Map(
+		clk => clk,
+		din => data_mem_to_cpu,
+		dout => data_cpu_to_mem,
+		addr => addr,
+		mem_read => mem_read,
+		mem_write => mem_write,
+		mem_valid => mem_valid,
+		en_and => '0',
+		skip => open
 	);
 
-	sm2 : sm Port Map(
-		clk => clk2,
-		trig => trig2,
-		fi => fi2_int
+	inst_mem: mem Port Map(
+		clk => clk,
+		din => data_cpu_to_mem,
+		dout => data_mem_to_cpu,
+		addr => addr,
+		mem_read => mem_read,
+		mem_write => mem_write,
+		mem_valid => mem_valid
 	);
-
-	sync1_proc: process(clk1)
-	begin
-		if rising_edge(clk1) then
-			trig1_mid <= not fi2_int;
-			trig1 <= trig1_mid;
-		end if;
-	end process;
-
-	sync2_proc: process(clk2)
-	begin
-		if rising_edge(clk2) then
-			trig2_mid <= fi1_int;
-			trig2 <= trig2_mid;
-		end if;
-	end process;
-
-	fi1 <= fi1_int;
-	fi2 <= fi2_int;
-end Behavioral;
+end behavioral;

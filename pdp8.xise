@@ -17,11 +17,11 @@
   <files>
     <file xil_pn:name="top_level.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="0"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="5"/>
     </file>
     <file xil_pn:name="cpu.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="0"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="1"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="4"/>
     </file>
     <file xil_pn:name="uart.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="1"/>
@@ -40,15 +40,30 @@
     <file xil_pn:name="Nexys3_Master.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
     </file>
+    <file xil_pn:name="ipcore_dir/ram.xco" xil_pn:type="FILE_COREGEN">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="82"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="2"/>
+    </file>
+    <file xil_pn:name="mem.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="89"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="3"/>
+    </file>
+    <file xil_pn:name="state.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="93"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="1"/>
+    </file>
+    <file xil_pn:name="ipcore_dir/ram.xise" xil_pn:type="FILE_COREGENISE">
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+    </file>
   </files>
 
   <properties>
     <property xil_pn:name="Auto Implementation Top" xil_pn:value="false" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Device" xil_pn:value="xc6slx16" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Device Family" xil_pn:value="Spartan6" xil_pn:valueState="non-default"/>
-    <property xil_pn:name="Implementation Top" xil_pn:value="Architecture|top_uart|Behavioral" xil_pn:valueState="non-default"/>
-    <property xil_pn:name="Implementation Top File" xil_pn:value="top_uart.vhd" xil_pn:valueState="non-default"/>
-    <property xil_pn:name="Implementation Top Instance Path" xil_pn:value="/top_uart" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Implementation Top" xil_pn:value="Architecture|top_level|Behavioral" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Implementation Top File" xil_pn:value="top_level.vhd" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Implementation Top Instance Path" xil_pn:value="/top_level" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Package" xil_pn:value="csg324" xil_pn:valueState="default"/>
     <property xil_pn:name="Preferred Language" xil_pn:value="VHDL" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Property Specification in Project File" xil_pn:value="Store non-default values only" xil_pn:valueState="non-default"/>
