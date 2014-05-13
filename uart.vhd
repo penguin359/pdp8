@@ -43,34 +43,27 @@ begin
 
 	process(clk)
 	begin
-		if rising_edge(clk) then
+		if rising_edge(clk) and en_count = '1' then
 			if tx_start = '1' then
-				txcount <= (others => '0');
-			elsif txdone = '0' and en_count = '1' then -- 16*10-1
-				txcount <= txcount + 1;
+				txcount <= txcount_max;
+			elsif txdone = '0' then -- 16*10-1
+				txcount <= txcount - 1;
 			end if;
 		end if;
 	end process;
-	txdone <= '1' when txcount = txcount_max else '0'; -- 16*10-1
-	txbit <= '1' when txcount(3 downto 0) = "0000" else '0';
+	txdone <= '1' when txcount = 0 else '0'; -- 16*10-1
+	txbit <= '1' when txcount(3 downto 0) = "1111" else '0';
 
 	-- Transmit data register
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			--if txload2 = '1' then
-			--	if txack2 = '1' then
-			--		txload2 <= '0';
-			--	end if;
-			--elsif txload = '1' then
 			if txack2 = '1' then
-				--txload2 <= '0';
+				txload2 <= '0';
 			end if;
 			if txload = '1' then
 				data_req <= data;
-				--busy <= '1';
-				--ack <= '1';
-				--txload2 <= '1';
+				txload2 <= '1';
 			end if;
 		end if;
 	end process;

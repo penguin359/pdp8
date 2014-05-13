@@ -32,6 +32,7 @@
 *.vho
 /*.xpi
 /*.xst
+/*_bitgen.xwbt
 /*_envsettings.html
 /*_guide.ncd
 /*_isim_*.exe
