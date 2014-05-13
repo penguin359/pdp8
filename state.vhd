@@ -45,6 +45,13 @@ begin
 					next_state <= Sread_instr;
 				end if;
 			when Sread_instr =>
+				-- Read memory at address PC and load into IR
+				load_addr_pc <= '1';
+				load_ir_data <= '1';
+				mem_read <= '1';
+			when Sexec_instr =>
+				if mem_valid = '1' then
+				end if;
 		end case;
 	end process;
 end behavioral;
