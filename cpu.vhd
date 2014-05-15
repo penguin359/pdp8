@@ -1,12 +1,12 @@
 ---------------------------------------------------------------------
 library IEEE;
+library work;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use work.control.ALL;
 ---------------------------------------------------------------------
 entity cpu is
     Port( clk : in  STD_LOGIC;
-	  --data : inout STD_LOGIC_VECTOR(11 downto 0);
-	  --addr : out STD_LOGIC_VECTOR(11 downto 0);
 	  din : in STD_LOGIC_VECTOR(11 downto 0);
 	  dout : out STD_LOGIC_VECTOR(11 downto 0);
 	  addr : out STD_LOGIC_VECTOR(11 downto 0);
@@ -24,8 +24,14 @@ component state
     	  run : in  STD_LOGIC;
     	  opcode : in  STD_LOGIC_VECTOR(2 downto 0);
     	  indirect : in  STD_LOGIC;
-    	  load_addr_pc  : out STD_LOGIC;
-    	  load_ir_data  : out STD_LOGIC;
+	  sel_ac : out sel_ac;
+	  sel_pc : out sel_pc;
+	  sel_addr : out sel_addr;
+	  sel_data : out sel_data;
+	  sel_ir : out sel_ir;
+	  sel_ma : out sel_ma;
+	  sel_md : out sel_md;
+	  md_clear : in STD_LOGIC;
 	  mem_read  : out STD_LOGIC;
 	  mem_write  : out STD_LOGIC;
 	  mem_valid  : in  STD_LOGIC;
@@ -37,10 +43,16 @@ end component;
 --signal ac : word := (others => '0');
 --signal ir : word := (others => '0');
 --signal ea : word := (others => '0');
-signal ac : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
-signal link : STD_LOGIC := '0';
+--signal ac : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
+--signal link : STD_LOGIC := '0';
+signal link_ac : STD_LOGIC_VECTOR(12 downto 0) := (others => '0');
+signal ac : STD_LOGIC_VECTOR(11 downto 0);
+signal link : STD_LOGIC;
 signal ir : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
-signal ea : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
+signal ma : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
+signal md : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
+--signal ea : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
+signal ea : STD_LOGIC_VECTOR(11 downto 0);
 signal pc : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
 
 constant z_bit : INTEGER := 7;
@@ -79,45 +91,136 @@ signal uc_stage2 : STD_LOGIC_VECTOR(12 downto 0);
 signal uc_stage3 : STD_LOGIC_VECTOR(12 downto 0);
 signal uc_stage4 : STD_LOGIC_VECTOR(12 downto 0);
 
-signal load_pc_data : STD_LOGIC;
+signal sel_ac : sel_ac;
+signal sel_pc : sel_pc;
+signal sel_addr : sel_addr;
+signal sel_data : sel_data;
+signal sel_ir : sel_ir;
+signal sel_ma : sel_ma;
+signal sel_md : sel_md;
+
+signal md_clear : STD_LOGIC;
 begin
 	inst_state: state Port Map(
 		clk => clk,
-		run => '0',
+		run => '1',
 		opcode => ir(11 downto 9),
 		indirect => ir(i_bit),
-		load_addr_pc => open,
-		load_ir_data => open,
+		sel_ac => sel_ac,
+		sel_pc => sel_pc,
+		sel_addr => sel_addr,
+		sel_data => sel_data,
+		sel_ir => sel_ir,
+		sel_ma => sel_ma,
+		sel_md => sel_md,
+		md_clear => md_clear,
 		mem_read => mem_read,
 		mem_write => mem_write,
 		mem_valid => mem_valid,
 		halted => open
 	);
 
+	with sel_addr select addr <=
+		ea when addr_ea,
+		ma when addr_ma,
+		pc when addr_pc,
+		ea when others;
+
+	with sel_data select dout <=
+		ac when data_ac,
+		pc when data_pc,
+		ea when others;
+
 	-- Address calculation
-	process(clk)
+	--process(clk)
+	--variable page : std_logic_vector(11 downto 7);
+	--begin
+	--	if rising_edge(clk) then
+	--		if ir(z_bit) = '1' then
+	--			page := pc(11 downto 7);
+	--		else
+	--			page := (others => '0');
+	--		end if;
+	--		ea <= page & ir(6 downto 0);
+	--	end if;
+	--end process;
+	process(pc(11 downto 7), ir(z_bit), ir(6 downto 0))
 	variable page : std_logic_vector(11 downto 7);
 	begin
-		if rising_edge(clk) then
-			if ir(z_bit) = '1' then
-				page := pc(11 downto 7);
-			else
-				page := (others => '0');
-			end if;
-			ea <= page & ir(6 downto 0);
+		if ir(z_bit) = '1' then
+			page := pc(11 downto 7);
+		else
+			page := (others => '0');
 		end if;
+		ea <= page & ir(6 downto 0);
 	end process;
 
 	-- Program Counter
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			if load_pc_data = '1' then
+			if sel_pc = pc_data then
 				pc <= din;
+			elsif sel_pc = pc_ma then
+				pc <= ma;
+			elsif sel_pc = pc_ma1 then
+				pc <= ma + 1;
+			elsif sel_pc = pc_incr then
+				pc <= pc + 1;
+			elsif sel_pc = pc_skip then
+				pc <= pc + 2;
 			end if;
-			--if load_pc_ea = '1' then
 		end if;
 	end process;
+
+	-- Accumulator and Link
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if sel_ac = ac_and_md then
+				link_ac <= link_ac and ("1" & md);
+			elsif sel_ac = ac_add_md then
+				link_ac <= link_ac + ("0" & md);
+			elsif sel_ac = ac_zero then
+				link_ac <= link & "000000000000";
+			elsif sel_ac = ac_uc then
+				link_ac <= uc_stage4;
+			end if;
+		end if;
+	end process;
+
+	-- Instruction Register
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if sel_ir = ir_data then
+				ir <= din;
+			end if;
+		end if;
+	end process;
+
+	-- Memory Address
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if sel_ma = ma_data then
+				ma <= din;
+			elsif sel_ma = ma_ea then
+				ma <= ea;
+			end if;
+		end if;
+	end process;
+
+	-- Memory Data
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if sel_md = md_data then
+				md <= din;
+			end if;
+		end if;
+	end process;
+	md_clear <= '1' when md = "000000000000" else '0';
 
 	-- Decoding OPR instructions
 	en_cla <= ir(cla_bit);
@@ -159,6 +262,9 @@ begin
 		     uc_stage3;
 
 	skip <= '1' when ((en_sma = '1' and ac(11) = '1') or (en_sza = '1' and ac = "000000000000") or (en_snl = '1' and link = '1')) xor en_and = '1' else '0';
+
+	ac <= link_ac(11 downto 0);
+	link <= link_ac(12);
 end behavioral;
 
 --10 ... 02 01 00 12 11 RTL

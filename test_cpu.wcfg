@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/lorenl/Dropbox/School/EE432/pdp8-vhdl/test_cpu_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="control" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="test_cpu" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="14" />
+   <wvobject fp_name="/test_cpu/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/din" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">din[11:0]</obj_property>
+      <obj_property name="ObjectShortName">din[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/mem_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mem_valid</obj_property>
+      <obj_property name="ObjectShortName">mem_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/en_and" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">en_and</obj_property>
+      <obj_property name="ObjectShortName">en_and</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dout[11:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">addr[11:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/mem_read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mem_read</obj_property>
+      <obj_property name="ObjectShortName">mem_read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/mem_write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mem_write</obj_property>
+      <obj_property name="ObjectShortName">mem_write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/skip" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">skip</obj_property>
+      <obj_property name="ObjectShortName">skip</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/clk_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_period</obj_property>
+      <obj_property name="ObjectShortName">clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/uut/inst_state/current_state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">current_state</obj_property>
+      <obj_property name="ObjectShortName">current_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/uut/ma" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ma[11:0]</obj_property>
+      <obj_property name="ObjectShortName">ma[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/uut/ea" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ea[11:0]</obj_property>
+      <obj_property name="ObjectShortName">ea[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/uut/ir" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ir[11:0]</obj_property>
+      <obj_property name="ObjectShortName">ir[11:0]</obj_property>
+   </wvobject>
+</wave_config>

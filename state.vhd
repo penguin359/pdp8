@@ -1,14 +1,21 @@
 ---------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use work.control.ALL;
 ---------------------------------------------------------------------
 entity state is
     Port( clk : in  STD_LOGIC;
     	  run : in  STD_LOGIC;
     	  opcode : in  STD_LOGIC_VECTOR(2 downto 0);
     	  indirect : in  STD_LOGIC;
-    	  load_addr_pc  : out STD_LOGIC;
-    	  load_ir_data  : out STD_LOGIC;
+	  sel_ac : out sel_ac;
+	  sel_pc : out sel_pc;
+	  sel_addr : out sel_addr;
+	  sel_data : out sel_data;
+	  sel_ir : out sel_ir;
+	  sel_ma : out sel_ma;
+	  sel_md : out sel_md;
+	  md_clear : in STD_LOGIC;
     	  mem_read  : out STD_LOGIC;
     	  mem_write  : out STD_LOGIC;
     	  mem_valid  : in  STD_LOGIC;
@@ -20,7 +27,7 @@ architecture behavioral of state is
 -- 13 inputs + IR
 -- 33 outputs
 -- 22 states
-type cpu_state is (Shalt, Sread_instr, Sdecode_instr, Sexec_instr, Sexec_opr, Sexec_iot);
+type cpu_state is (Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2, Sexec_opr, Sexec_iot);
 signal current_state : cpu_state := Shalt;
 signal next_state : cpu_state;
 --type word is std_logic_vector(11 downto 0);
@@ -48,9 +55,18 @@ begin
 		end if;
 	end process;
 
-	process(current_state)
+	process(current_state, run, mem_valid, opcode, indirect, md_clear)
 	begin
 		halted <= '0';
+		mem_read <= '0';
+		mem_write <= '0';
+		sel_ac <= ac_none;
+		sel_pc <= pc_none;
+		sel_addr <= addr_none;
+		sel_data <= data_none;
+		sel_ir <= ir_none;
+		sel_ma <= ma_none;
+		sel_md <= md_none;
 		next_state <= current_state;
 		case current_state is
 			when Shalt =>
@@ -60,20 +76,100 @@ begin
 				end if;
 			when Sread_instr =>
 				-- Read memory at address PC and load into IR
-				load_addr_pc <= '1';
-				load_ir_data <= '1';
+				sel_addr <= addr_pc;
+				sel_ir <= ir_data;
 				mem_read <= '1';
 				if mem_valid = '1' then
-					next_state <= Sexec_instr;
+					next_state <= Sdecode_instr;
 				end if;
 			when Sdecode_instr =>
 				if opcode = opcode_opr then
 					next_state <= Sexec_opr;
 				elsif opcode = opcode_iot then
-					next_state <= Sexec_opr;
+					next_state <= Sexec_iot;
 				elsif indirect = '1' then
+					-- Let mem_read drop to '0'
+					next_state <= Sread_indirect;
+				else
+					sel_ma <= ma_ea;
+					next_state <= Sexec_instr;
+				end if;
+			when Sread_indirect =>
+				sel_addr <= addr_ea;
+				sel_ma <= ma_data;
+				mem_read <= '1';
+				if mem_valid = '1' then
+					next_state <= Sexec_instr;
 				end if;
 			when Sexec_instr =>
+				case opcode is
+					when opcode_and =>
+						sel_addr <= addr_ma;
+						sel_md <= md_data;
+						mem_read <= '1';
+						if mem_valid = '1' then
+							next_state <= Sexec_instr2;
+						end if;
+					when opcode_tad =>
+						sel_addr <= addr_ma;
+						sel_md <= md_data;
+						mem_read <= '1';
+						if mem_valid = '1' then
+							next_state <= Sexec_instr2;
+						end if;
+					when opcode_isz =>
+						sel_addr <= addr_ma;
+						sel_md <= md_data;
+						mem_read <= '1';
+						if mem_valid = '1' then
+							next_state <= Sexec_instr2;
+						end if;
+					when opcode_dca =>
+						sel_addr <= addr_ma;
+						sel_data <= data_ac;
+						mem_write <= '1';
+						if mem_valid = '1' then
+							next_state <= Sexec_instr2;
+						end if;
+					when opcode_jms =>
+						sel_addr <= addr_ma;
+						sel_data <= data_pc;
+						mem_write <= '1';
+						if mem_valid = '1' then
+							next_state <= Sexec_instr2;
+						end if;
+					when opcode_jmp =>
+						sel_pc <= pc_ma;
+						next_state <= Sread_instr;
+					when others =>
+				end case;
+			when Sexec_instr2 =>
+				sel_pc <= pc_incr;
+				next_state <= Sread_instr;
+				case opcode is
+					when opcode_and =>
+						sel_ac <= ac_and_md;
+					when opcode_tad =>
+						sel_ac <= ac_add_md;
+					when opcode_isz =>
+						sel_pc <= pc_none;
+						next_state <= current_state;
+						sel_addr <= addr_ma;
+						sel_data <= data_md;
+						mem_write <= '1';
+						if mem_valid = '1' then
+							sel_pc <= pc_incr;
+							if md_clear = '1' then
+								sel_pc <= pc_skip;
+							end if;
+							next_state <= Sread_instr;
+						end if;
+					when opcode_dca =>
+						sel_ac <= ac_zero;
+					when opcode_jms =>
+						sel_pc <= pc_ma1;
+					when others =>
+				end case;
 			when others =>
 				next_state <= Shalt;
 		end case;
