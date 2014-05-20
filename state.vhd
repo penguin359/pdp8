@@ -119,7 +119,7 @@ begin
 						end if;
 					when opcode_isz =>
 						sel_addr <= addr_ma;
-						sel_md <= md_data;
+						sel_md <= md_data1;
 						mem_read <= '1';
 						if mem_valid = '1' then
 							next_state <= Sexec_instr2;
@@ -133,7 +133,7 @@ begin
 						end if;
 					when opcode_jms =>
 						sel_addr <= addr_ma;
-						sel_data <= data_pc;
+						sel_data <= data_pc1;
 						mem_write <= '1';
 						if mem_valid = '1' then
 							next_state <= Sexec_instr2;

@@ -128,7 +128,9 @@ begin
 
 	with sel_data select dout <=
 		ac when data_ac,
-		pc when data_pc,
+		md when data_md,
+		--pc when data_pc,
+		pc+1 when data_pc1,
 		ea when others;
 
 	-- Address calculation
@@ -217,6 +219,8 @@ begin
 		if rising_edge(clk) then
 			if sel_md = md_data then
 				md <= din;
+			elsif sel_md = md_data1 then
+				md <= din + 1;
 			end if;
 		end if;
 	end process;

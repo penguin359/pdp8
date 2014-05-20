@@ -7,8 +7,27 @@ end test_cpu;
 ------------------------------------------------------------------------
 architecture behavioral of test_cpu is 
  
--- Component Declaration for the Unit Under Test (UUT)
+type sig_in_t is
+record
+	--clk : STD_LOGIC;
+	din : STD_LOGIC_VECTOR(11 downto 0);
+	mem_valid : STD_LOGIC;
+	--en_and : STD_LOGIC;
+end record;
  
+type sig_out_t is
+record
+	dout : STD_LOGIC_VECTOR(11 downto 0);
+	addr : STD_LOGIC_VECTOR(11 downto 0);
+	mem_read : STD_LOGIC;
+	mem_write : STD_LOGIC;
+	skip : STD_LOGIC;
+end record;
+ 
+signal sin : sig_in_t := (din => (others => '0'), mem_valid => '0');
+signal sout : sig_out_t;
+
+-- Component Declaration for the Unit Under Test (UUT)
 component cpu
     Port( clk : in  STD_LOGIC;
 	  din : in STD_LOGIC_VECTOR(11 downto 0);
@@ -39,6 +58,81 @@ signal skip : STD_LOGIC;
 -- Clock period definitions
 constant clk_period : TIME := 10 ns;
  
+procedure instr( constant idx : in integer;
+		 constant expected : in STD_LOGIC_VECTOR(11 downto 0);
+		 constant val : in STD_LOGIC_VECTOR(11 downto 0);
+		 signal o : out sig_in_t;
+		 signal i : in sig_out_t
+) is
+begin
+	-- Read instruction
+	wait for clk_period*4;
+	assert i.mem_read = '1'
+	report "(" & INTEGER'image(idx) & ")CPU Not reading instruction"
+	severity failure;
+	assert i.addr = expected
+	report "(" & INTEGER'image(idx) & ")Incorrect PC address"
+	severity failure;
+
+	-- Set instruction
+	o.din <= val;
+	o.mem_valid <= '1';
+	wait for clk_period;
+	o.mem_valid <= '0';
+	assert i.mem_read = '0'
+	report "(" & INTEGER'image(idx) & ")Read not finished"
+	severity failure;
+end instr;
+
+procedure read( constant idx : in integer;
+		constant expected : in STD_LOGIC_VECTOR(11 downto 0);
+		constant val : in STD_LOGIC_VECTOR(11 downto 0);
+		signal o : out sig_in_t;
+		signal i : in sig_out_t
+) is
+begin
+	--wait until rising_edge(clk) and mem_read = '1'
+	wait for clk_period*4;
+	assert i.mem_read = '1'
+	report "(" & INTEGER'image(idx) & ")Not reading memory"
+	severity failure;
+	assert i.mem_write = '0'
+	report "(" & INTEGER'image(idx) & ")Incorrectly writing memory"
+	severity failure;
+	assert i.addr = expected
+	report "(" & INTEGER'image(idx) & ")Incorrect read address"
+	severity failure;
+	o.din <= val;
+	o.mem_valid <= '1';
+	wait for clk_period;
+	o.mem_valid <= '0';
+end read;
+
+procedure write( constant idx : in integer;
+		 constant expected : in STD_LOGIC_VECTOR(11 downto 0);
+		 constant val : in STD_LOGIC_VECTOR(11 downto 0);
+		 signal o : out sig_in_t;
+		 signal i : in sig_out_t
+) is
+begin
+	wait for clk_period*4;
+	assert i.mem_read = '0'
+	report "(" & INTEGER'image(idx) & ")Incorrectly reading memory"
+	severity failure;
+	assert i.mem_write = '1'
+	report "(" & INTEGER'image(idx) & ")Not writing memory"
+	severity failure;
+	assert i.addr = expected
+	report "(" & INTEGER'image(idx) & ")Incorrect write address"
+	severity failure;
+	assert i.dout = val
+	report "(" & INTEGER'image(idx) & ")Storing wrong value"
+	severity failure;
+	o.mem_valid <= '1';
+	wait for clk_period;
+	o.mem_valid <= '0';
+end write;
+
 begin
  
 	-- Instantiate the Unit Under Test (UUT)
@@ -72,172 +166,45 @@ begin
 
 		wait for clk_period*10;
 
-		-- Read instruction
-		assert mem_read = '1'
-		report "(1)CPU Not reading instruction"
-		severity failure;
-		assert addr = "000000000000"
-		report "(1a)Incorrect address"
-		severity failure;
-
-		-- TAD Z 101 0000
-		din <= "001001010000";
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-		assert mem_read = '0'
-		report "(1)Read not finished"
-		severity failure;
-
-		-- Operand read 26
-		--wait until rising_edge(clk) and mem_read = '1'
-		wait for clk_period*4;
-		assert mem_read = '1'
-		report "(1)Not reading operand"
-		severity failure;
-		assert addr = "000001010000"
-		report "(1b)Incorrect address"
-		severity failure;
-		din <= "000000011010";
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-
-		-- Read instruction
-		wait for clk_period*4;
-		assert mem_read = '1'
-		report "(2)CPU Not reading instruction"
-		severity failure;
-		assert addr = "000000000001"
-		report "(2a)Incorrect address"
-		severity failure;
-
-		-- JMP IZ 101 0001
-		din <= "101101010001";
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-		assert mem_read = '0'
-		report "(2)Read not finished"
-		severity failure;
-
-		-- Operand read 07000
-		wait for clk_period*4;
-		assert mem_read = '1'
-		report "(2)Not reading operand"
-		severity failure;
-		assert addr = "000001010001"
-		report "(2b)Incorrect address"
-		severity failure;
-		din <= "111000000000";
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-
-		-- Read instruction
-		wait for clk_period*4;
-		assert mem_read = '1'
-		report "(3)CPU Not reading instruction"
-		severity failure;
-		assert addr = "111000000000"
-		report "(3a)Incorrect address"
-		severity failure;
-
-		-- TAD 000 0011
-		din <= "001010000011";
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-		assert mem_read = '0'
-		report "(3)Read not finished"
-		severity failure;
-
-		-- Operand read 14
-		wait for clk_period*4;
-		assert mem_read = '1'
-		report "(3)Not reading operand"
-		severity failure;
-		assert addr = "111000000011"
-		report "(3b)Incorrect address"
-		severity failure;
-		din <= "000000001110";
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-
-		-- Read instruction
-		wait for clk_period*4;
-		assert mem_read = '1'
-		report "(4)CPU Not reading instruction"
-		severity failure;
-		assert addr = "111000000001"
-		report "(4a)Incorrect address"
-		severity failure;
-
-		-- DCA Z 000 1000
-		din <= "011000001000";
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-		assert mem_read = '0'
-		report "(4)Read not finished"
-		severity failure;
-
-		-- Operand read 14
-		wait for clk_period*4;
-		assert mem_read = '0'
-		report "(4)Incorrectly reading operand"
-		severity failure;
-		assert mem_write = '1'
-		report "(4)Not writing operand"
-		severity failure;
-		assert addr = "000000001000"
-		report "(4b)Incorrect address"
-		severity failure;
-		assert dout = "000000101000"
-		report "(4)Storing wrong value"
-		severity failure;
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-
-		-- Read instruction
-		wait for clk_period*4;
-		assert mem_read = '1'
-		report "(5)CPU Not reading instruction"
-		severity failure;
-		assert addr = "111000000010"
-		report "(5a)Incorrect address"
-		severity failure;
-
-		-- DCA 000 1011
-		din <= "011010001011";
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
-		assert mem_read = '0'
-		report "(5)Read not finished"
-		severity failure;
-
-		-- Operand read 14
-		wait for clk_period*4;
-		assert mem_read = '0'
-		report "(5)Incorrectly reading operand"
-		severity failure;
-		assert mem_write = '1'
-		report "(5)Not writing operand"
-		severity failure;
-		assert addr = "111000001011"
-		report "(5b)Incorrect address"
-		severity failure;
-		assert dout = "000000000000"
-		report "(5)Storing wrong value"
-		severity failure;
-		mem_valid <= '1';
-		wait for clk_period;
-		mem_valid <= '0';
+		--    Idx  Address         Value
+		instr(1,  "000000000000", "001001010000", sin, sout); -- TAD Z 101 0000
+		read (1,  "000001010000", "000000011010", sin, sout); -- Read 00032 (26)
+		instr(2,  "000000000001", "101101010001", sin, sout); -- JMP IZ 101 0001
+		read (2,  "000001010001", "111000000000", sin, sout); -- Read 07000
+		instr(3,  "111000000000", "001010000011", sin, sout); -- TAD 000 0011
+		read (3,  "111000000011", "000000001110", sin, sout); -- Read 00016 (14)
+		instr(4,  "111000000001", "011000001000", sin, sout); -- DCA Z 000 1000
+		write(4,  "000000001000", "000000101000", sin, sout); -- Write 00050 (40)
+		instr(5,  "111000000010", "011010001011", sin, sout); -- DCA 000 1011
+		write(5,  "111000001011", "000000000000", sin, sout); -- Write 00000 (0)
+		instr(6,  "111000000011", "010110010010", sin, sout); -- ISZ I 001 0010
+		read (6,  "111000010010", "100100110110", sin, sout); -- Read 04466
+		read (6,  "100100110110", "111111111110", sin, sout); -- Read 07776
+		write(6,  "100100110110", "111111111111", sin, sout); -- Write 07777
+		instr(7,  "111000000100", "010110010010", sin, sout); -- ISZ I 001 0010
+		read (7,  "111000010010", "100100110110", sin, sout); -- Read 04466
+		read (7,  "100100110110", "111111111111", sin, sout); -- Read 07777
+		write(7,  "100100110110", "000000000000", sin, sout); -- Write 00000
+		instr(8,  "111000000110", "001010011100", sin, sout); -- TAD 001 1100
+		read (8,  "111000011100", "000000011000", sin, sout); -- Read 00030 (24)
+		instr(9,  "111000000111", "100000000101", sin, sout); -- JMS Z 000 0101
+		write(9,  "000000000101", "111000001000", sin, sout); -- Write 07010
+		instr(10, "000000000110", "000010001101", sin, sout); -- AND 000 1101
+		read (10, "000000001101", "000000001111", sin, sout); -- Read 00017
+		instr(11, "000000000111", "011010001011", sin, sout); -- DCA 000 1011
+		write(11, "000000001011", "000000001000", sin, sout); -- Write 00010 (8)
 
 		wait;
 	end process;
 
+	--clk <= sin.clk;
+	din <= sin.din;
+	mem_valid <= sin.mem_valid;
+	--en_and <= sin.en_and;
+ 
+	sout.dout <= dout;
+	sout.addr <= addr;
+	sout.mem_read <= mem_read;
+	sout.mem_write <= mem_write;
+	sout.skip <= skip;
 end behavioral;
