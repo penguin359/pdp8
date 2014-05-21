@@ -27,7 +27,7 @@ architecture behavioral of state is
 -- 13 inputs + IR
 -- 33 outputs
 -- 22 states
-type cpu_state is (Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2, Sexec_opr, Sexec_iot);
+type cpu_state is (Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2);
 signal current_state : cpu_state := Shalt;
 signal next_state : cpu_state;
 --type word is std_logic_vector(11 downto 0);
@@ -84,9 +84,9 @@ begin
 				end if;
 			when Sdecode_instr =>
 				if opcode = opcode_opr then
-					next_state <= Sexec_opr;
+					next_state <= Sexec_instr;
 				elsif opcode = opcode_iot then
-					next_state <= Sexec_iot;
+					next_state <= Sexec_instr;
 				elsif indirect = '1' then
 					-- Let mem_read drop to '0'
 					next_state <= Sread_indirect;
@@ -140,6 +140,10 @@ begin
 						end if;
 					when opcode_jmp =>
 						sel_pc <= pc_ma;
+						next_state <= Sread_instr;
+					when opcode_opr =>
+						sel_ac <= ac_uc;
+						sel_pc <= pc_incr;
 						next_state <= Sread_instr;
 					when others =>
 				end case;
