@@ -255,9 +255,10 @@ begin
 	end process;
 	md_clear <= '1' when md = "000000000000" else '0';
 
-	skip <= md_clear when sel_skip = skip_md_clear else
-		uc_skip when sel_skip = skip_uc else
-		'0';
+	with sel_skip select
+	skip <= md_clear when skip_md_clear,
+		uc_skip  when skip_uc,
+		'0'      when others;
 
 	-- Decoding OPR instructions
 	uc_group <= group1 when ir(uc_group1_bit) = '0' else
