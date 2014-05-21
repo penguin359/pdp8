@@ -10,12 +10,12 @@ entity state is
     	  indirect : in  STD_LOGIC;
 	  sel_ac : out sel_ac;
 	  sel_pc : out sel_pc;
+	  sel_skip : out sel_skip;
 	  sel_addr : out sel_addr;
 	  sel_data : out sel_data;
 	  sel_ir : out sel_ir;
 	  sel_ma : out sel_ma;
 	  sel_md : out sel_md;
-	  md_clear : in STD_LOGIC;
     	  mem_read  : out STD_LOGIC;
     	  mem_write  : out STD_LOGIC;
     	  mem_valid  : in  STD_LOGIC;
@@ -55,13 +55,14 @@ begin
 		end if;
 	end process;
 
-	process(current_state, run, mem_valid, opcode, indirect, md_clear)
+	process(current_state, run, mem_valid, opcode, indirect)
 	begin
 		halted <= '0';
 		mem_read <= '0';
 		mem_write <= '0';
 		sel_ac <= ac_none;
 		sel_pc <= pc_none;
+		sel_skip <= skip_none;
 		sel_addr <= addr_none;
 		sel_data <= data_none;
 		sel_ir <= ir_none;
@@ -144,6 +145,7 @@ begin
 					when opcode_opr =>
 						sel_ac <= ac_uc;
 						sel_pc <= pc_incr;
+						sel_skip <= skip_uc;
 						next_state <= Sread_instr;
 					when others =>
 				end case;
@@ -163,9 +165,7 @@ begin
 						mem_write <= '1';
 						if mem_valid = '1' then
 							sel_pc <= pc_incr;
-							if md_clear = '1' then
-								sel_pc <= pc_skip;
-							end if;
+							sel_skip <= skip_md_clear;
 							next_state <= Sread_instr;
 						end if;
 					when opcode_dca =>

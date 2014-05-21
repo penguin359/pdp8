@@ -12,7 +12,6 @@ record
 	--clk : STD_LOGIC;
 	din : STD_LOGIC_VECTOR(11 downto 0);
 	mem_valid : STD_LOGIC;
-	--en_and : STD_LOGIC;
 end record;
  
 type sig_out_t is
@@ -21,7 +20,6 @@ record
 	addr : STD_LOGIC_VECTOR(11 downto 0);
 	mem_read : STD_LOGIC;
 	mem_write : STD_LOGIC;
-	skip : STD_LOGIC;
 end record;
  
 signal sin : sig_in_t := (din => (others => '0'), mem_valid => '0');
@@ -35,9 +33,7 @@ component cpu
 	  addr : out STD_LOGIC_VECTOR(11 downto 0);
 	  mem_read : out STD_LOGIC;
 	  mem_write : out STD_LOGIC;
-	  mem_valid : in STD_LOGIC;
-	  en_and : in  STD_LOGIC;
-	  skip   : out STD_LOGIC
+	  mem_valid : in STD_LOGIC
     );
 end component;
 
@@ -46,14 +42,12 @@ end component;
 signal clk : STD_LOGIC := '0';
 signal din : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
 signal mem_valid : STD_LOGIC := '0';
-signal en_and : STD_LOGIC := '0';
 
 --Outputs
 signal dout : STD_LOGIC_VECTOR(11 downto 0);
 signal addr : STD_LOGIC_VECTOR(11 downto 0);
 signal mem_read : STD_LOGIC;
 signal mem_write : STD_LOGIC;
-signal skip : STD_LOGIC;
 
 -- Clock period definitions
 constant clk_period : TIME := 10 ns;
@@ -143,9 +137,7 @@ begin
 		addr => addr,
 		mem_read => mem_read,
 		mem_write => mem_write,
-		mem_valid => mem_valid,
-		en_and => en_and,
-		skip => skip
+		mem_valid => mem_valid
         );
 
 	-- Clock process definitions
@@ -196,6 +188,12 @@ begin
 		instr(12, "000000001000", "111011010111", sin, sout); -- CLA CLL CML RTL IAC
 		instr(13, "000000001001", "011000010000", sin, sout); -- DCA 001 0000
 		write(13, "000000010000", "000000000110", sin, sout); -- Write 00011 (9)
+		instr(14, "000000001010", "111011010111", sin, sout); -- CLA CLL CML RTL IAC
+		instr(15, "000000001011", "111110100000", sin, sout); -- CLA SZA
+		instr(16, "000000001100", "111110100000", sin, sout); -- CLA SZA
+		instr(17, "000000001110", "111110100000", sin, sout); -- CLA SZA
+
+		assert false report "CPU Testing Successful!" severity note;
 
 		wait;
 	end process;
@@ -203,11 +201,9 @@ begin
 	--clk <= sin.clk;
 	din <= sin.din;
 	mem_valid <= sin.mem_valid;
-	--en_and <= sin.en_and;
  
 	sout.dout <= dout;
 	sout.addr <= addr;
 	sout.mem_read <= mem_read;
 	sout.mem_write <= mem_write;
-	sout.skip <= skip;
 end behavioral;
