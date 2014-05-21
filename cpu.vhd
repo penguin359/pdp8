@@ -12,7 +12,13 @@ entity cpu is
 	  addr : out STD_LOGIC_VECTOR(11 downto 0);
 	  mem_read : out STD_LOGIC;
 	  mem_write : out STD_LOGIC;
-	  mem_valid : in STD_LOGIC
+	  mem_valid : in STD_LOGIC;
+	  iot_skip : in STD_LOGIC;
+	  iot_ac_zero : in STD_LOGIC;
+	  iot_din : in STD_LOGIC_VECTOR(11 downto 0);
+	  iot_dout : out STD_LOGIC_VECTOR(11 downto 0);
+	  iot_addr : out STD_LOGIC_VECTOR(5 downto 0);
+	  iot_bits : out STD_LOGIC_VECTOR(2 downto 0)
     );
 end cpu;
 ---------------------------------------------------------------------
@@ -216,6 +222,8 @@ begin
 				link_ac <= link & "000000000000";
 			elsif sel_ac = ac_uc then
 				link_ac <= uc_link_ac;
+			elsif sel_ac = ac_iot then
+				link_ac <= link & iot_din;
 			end if;
 		end if;
 	end process;
@@ -258,6 +266,7 @@ begin
 	with sel_skip select
 	skip <= md_clear when skip_md_clear,
 		uc_skip  when skip_uc,
+		iot_skip when skip_iot,
 		'0'      when others;
 
 	-- Decoding OPR instructions
@@ -331,6 +340,10 @@ begin
 
 	ac <= link_ac(11 downto 0);
 	link <= link_ac(12);
+
+	iot_dout <= ac;
+	iot_addr <= ir(8 downto 3);
+	iot_bits <= ir(2 downto 0);
 end behavioral;
 
 --10 ... 02 01 00 12 11 RTL

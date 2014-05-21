@@ -33,8 +33,40 @@ component cpu
 	  addr : out STD_LOGIC_VECTOR(11 downto 0);
 	  mem_read : out STD_LOGIC;
 	  mem_write : out STD_LOGIC;
-	  mem_valid : in STD_LOGIC
+	  mem_valid : in STD_LOGIC;
+	  iot_skip : in STD_LOGIC;
+	  iot_ac_zero : in STD_LOGIC;
+	  iot_din : in STD_LOGIC_VECTOR(11 downto 0);
+	  iot_dout : out STD_LOGIC_VECTOR(11 downto 0);
+	  iot_addr : out STD_LOGIC_VECTOR(5 downto 0);
+	  iot_bits : out STD_LOGIC_VECTOR(2 downto 0)
     );
+end component;
+
+component IOT_Distributor
+    Port ( -- interface to device 3
+           ready_3 : in  STD_LOGIC;
+           clear_3 : out  STD_LOGIC;
+           clearacc_3 : in  STD_LOGIC;
+           dataout_3 : out  STD_LOGIC_VECTOR (7 downto 0);
+           datain_3 : in  STD_LOGIC_VECTOR (7 downto 0);
+           load_3 : out  STD_LOGIC;
+           -- interface to device 4
+           ready_4 : in  STD_LOGIC;
+           clear_4 : out  STD_LOGIC;
+           clearacc_4 : in  STD_LOGIC;
+           dataout_4 : out  STD_LOGIC_VECTOR (7 downto 0);
+           datain_4 : in  STD_LOGIC_VECTOR (7 downto 0);
+           load_4 : out  STD_LOGIC;          
+           -- interface to CPU
+           skip_flag : out  STD_LOGIC;
+           bit1_cp2 : in  STD_LOGIC;
+           clearacc : out  STD_LOGIC;
+           dataout : in  STD_LOGIC_VECTOR (7 downto 0);
+           datain : out  STD_LOGIC_VECTOR (7 downto 0);
+           bit2_cp3 : in  STD_LOGIC;
+           io_address : in  STD_LOGIC_VECTOR (2 downto 0)
+);
 end component;
 
 
@@ -42,12 +74,18 @@ end component;
 signal clk : STD_LOGIC := '0';
 signal din : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
 signal mem_valid : STD_LOGIC := '0';
+signal iot_skip : STD_LOGIC := '0';
+signal iot_ac_zero : STD_LOGIC := '0';
+signal iot_din : STD_LOGIC_VECTOR(11 downto 0) := (others => '0');
 
 --Outputs
 signal dout : STD_LOGIC_VECTOR(11 downto 0);
 signal addr : STD_LOGIC_VECTOR(11 downto 0);
 signal mem_read : STD_LOGIC;
 signal mem_write : STD_LOGIC;
+signal iot_dout : STD_LOGIC_VECTOR(11 downto 0);
+signal iot_addr : STD_LOGIC_VECTOR(5 downto 0);
+signal iot_bits : STD_LOGIC_VECTOR(2 downto 0);
 
 -- Clock period definitions
 constant clk_period : TIME := 10 ns;
@@ -137,8 +175,40 @@ begin
 		addr => addr,
 		mem_read => mem_read,
 		mem_write => mem_write,
-		mem_valid => mem_valid
+		mem_valid => mem_valid,
+		iot_skip => iot_skip,
+		iot_ac_zero => iot_ac_zero,
+		iot_din => iot_din,
+		iot_dout => iot_dout,
+		iot_addr => iot_addr,
+		iot_bits => iot_bits
         );
+
+	iot : IOT_Distributor Port Map (
+		-- interface to device 3
+		ready_3 => '0',
+		clear_3 => open,
+		clearacc_3 => '0',
+		dataout_3 => open,
+		datain_3 => "00000000",
+		load_3 => open,
+		-- interface to device 4
+		ready_4 => '0',
+		clear_4 => open,
+		clearacc_4 => '0',
+		dataout_4 => open,
+		datain_4 => "00000000",
+		load_4 => open,
+		-- interface to CPU
+		skip_flag => iot_skip,
+		bit1_cp2 => iot_bits(1),
+		clearacc => iot_ac_zero,
+		dataout => iot_dout(7 downto 0),
+		datain => iot_din(7 downto 0),
+		bit2_cp3 => iot_bits(2),
+		io_address => iot_addr(2 downto 0)
+	);
+
 
 	-- Clock process definitions
 	clk_process :process

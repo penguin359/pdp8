@@ -142,6 +142,11 @@ begin
 					when opcode_jmp =>
 						sel_pc <= pc_ma;
 						next_state <= Sread_instr;
+					when opcode_iot =>
+						sel_ac <= ac_iot;
+						sel_pc <= pc_incr;
+						sel_skip <= skip_iot;
+						next_state <= Sread_instr;
 					when opcode_opr =>
 						sel_ac <= ac_uc;
 						sel_pc <= pc_incr;
