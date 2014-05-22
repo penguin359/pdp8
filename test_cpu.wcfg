@@ -10,10 +10,11 @@
             <top_module name="std_logic_arith" />
             <top_module name="std_logic_unsigned" />
             <top_module name="test_cpu" />
+            <top_module name="textio" />
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="15" />
+   <WVObjectSize size="31" />
    <wvobject fp_name="/test_cpu/sin" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">sin</obj_property>
       <obj_property name="ObjectShortName">sin</obj_property>
@@ -21,6 +22,54 @@
    <wvobject fp_name="/test_cpu/sout" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">sout</obj_property>
       <obj_property name="ObjectShortName">sout</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/ready_3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ready_3</obj_property>
+      <obj_property name="ObjectShortName">ready_3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/clear_3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clear_3</obj_property>
+      <obj_property name="ObjectShortName">clear_3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/clearacc_3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clearacc_3</obj_property>
+      <obj_property name="ObjectShortName">clearacc_3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/dataout_3" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dataout_3[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dataout_3[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/datain_3" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">datain_3[7:0]</obj_property>
+      <obj_property name="ObjectShortName">datain_3[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/load_3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">load_3</obj_property>
+      <obj_property name="ObjectShortName">load_3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/ready_4" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ready_4</obj_property>
+      <obj_property name="ObjectShortName">ready_4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/clear_4" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clear_4</obj_property>
+      <obj_property name="ObjectShortName">clear_4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/clearacc_4" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clearacc_4</obj_property>
+      <obj_property name="ObjectShortName">clearacc_4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/dataout_4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dataout_4[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dataout_4[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/datain_4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">datain_4[7:0]</obj_property>
+      <obj_property name="ObjectShortName">datain_4[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/load_4" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">load_4</obj_property>
+      <obj_property name="ObjectShortName">load_4</obj_property>
    </wvobject>
    <wvobject fp_name="/test_cpu/clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clk</obj_property>
@@ -33,6 +82,18 @@
    <wvobject fp_name="/test_cpu/mem_valid" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">mem_valid</obj_property>
       <obj_property name="ObjectShortName">mem_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/iot_skip" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">iot_skip</obj_property>
+      <obj_property name="ObjectShortName">iot_skip</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/iot_ac_zero" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">iot_ac_zero</obj_property>
+      <obj_property name="ObjectShortName">iot_ac_zero</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/iot_din" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">iot_din[11:0]</obj_property>
+      <obj_property name="ObjectShortName">iot_din[11:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/test_cpu/dout" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">dout[11:0]</obj_property>
@@ -50,6 +111,18 @@
       <obj_property name="ElementShortName">mem_write</obj_property>
       <obj_property name="ObjectShortName">mem_write</obj_property>
    </wvobject>
+   <wvobject fp_name="/test_cpu/iot_dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">iot_dout[11:0]</obj_property>
+      <obj_property name="ObjectShortName">iot_dout[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/iot_addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">iot_addr[5:0]</obj_property>
+      <obj_property name="ObjectShortName">iot_addr[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/test_cpu/iot_bits" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">iot_bits[2:0]</obj_property>
+      <obj_property name="ObjectShortName">iot_bits[2:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="/test_cpu/clk_period" type="other" db_ref_id="1">
       <obj_property name="ElementShortName">clk_period</obj_property>
       <obj_property name="ObjectShortName">clk_period</obj_property>
@@ -58,20 +131,12 @@
       <obj_property name="ElementShortName">ac[11:0]</obj_property>
       <obj_property name="ObjectShortName">ac[11:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test_cpu/uut/uc_group" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">uc_group</obj_property>
-      <obj_property name="ObjectShortName">uc_group</obj_property>
+   <wvobject fp_name="/test_cpu/uut/inst_state/opcode" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">opcode[2:0]</obj_property>
+      <obj_property name="ObjectShortName">opcode[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/test_cpu/uut/uc1_stage4" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">uc1_stage4[12:0]</obj_property>
-      <obj_property name="ObjectShortName">uc1_stage4[12:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test_cpu/uut/sel_ac" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">sel_ac</obj_property>
-      <obj_property name="ObjectShortName">sel_ac</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test_cpu/uut/uc_link_ac" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">uc_link_ac[12:0]</obj_property>
-      <obj_property name="ObjectShortName">uc_link_ac[12:0]</obj_property>
+   <wvobject fp_name="/test_cpu/uut/inst_state/current_state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">current_state</obj_property>
+      <obj_property name="ObjectShortName">current_state</obj_property>
    </wvobject>
 </wave_config>

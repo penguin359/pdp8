@@ -13,6 +13,7 @@ entity state is
 	  sel_skip : out sel_skip;
 	  sel_addr : out sel_addr;
 	  sel_data : out sel_data;
+	  sel_iot : out sel_iot;
 	  sel_ir : out sel_ir;
 	  sel_ma : out sel_ma;
 	  sel_md : out sel_md;
@@ -65,6 +66,7 @@ begin
 		sel_skip <= skip_none;
 		sel_addr <= addr_none;
 		sel_data <= data_none;
+		sel_iot <= iot_none;
 		sel_ir <= ir_none;
 		sel_ma <= ma_none;
 		sel_md <= md_none;
@@ -146,6 +148,7 @@ begin
 						sel_ac <= ac_iot;
 						sel_pc <= pc_incr;
 						sel_skip <= skip_iot;
+						sel_iot <= iot_en;
 						next_state <= Sread_instr;
 					when opcode_opr =>
 						sel_ac <= ac_uc;

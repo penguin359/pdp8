@@ -317,7 +317,10 @@ begin
 		instr(14, "000000001010", "111011010111", sin, sout); -- CLA CLL CML RTL IAC
 		instr(15, "000000001011", "111110100000", sin, sout); -- CLA SZA
 		instr(16, "000000001100", "111110100000", sin, sout); -- CLA SZA
-		instr(17, "000000001110", "111110100000", sin, sout); -- CLA SZA
+		instr(17, "000000001110", "111011010111", sin, sout); -- CLA CLL CML RTL IAC
+		instr(18, "000000001111", "110000100110", sin, sout); -- TLS
+		instr(19, "000000010000", "110000011110", sin, sout); -- KRB
+		instr(20, "000000010001", "110000100110", sin, sout); -- TLS
 
 		assert false report "CPU Testing Successful!" severity note;
 

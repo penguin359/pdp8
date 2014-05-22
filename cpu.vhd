@@ -32,6 +32,7 @@ component state
 	  sel_skip : out sel_skip;
 	  sel_addr : out sel_addr;
 	  sel_data : out sel_data;
+	  sel_iot : out sel_iot;
 	  sel_ir : out sel_ir;
 	  sel_ma : out sel_ma;
 	  sel_md : out sel_md;
@@ -127,11 +128,13 @@ signal sel_pc : sel_pc;
 signal sel_skip: sel_skip;
 signal sel_addr : sel_addr;
 signal sel_data : sel_data;
+signal sel_iot : sel_iot;
 signal sel_ir : sel_ir;
 signal sel_ma : sel_ma;
 signal sel_md : sel_md;
 
 signal md_clear : STD_LOGIC;
+signal iot_skip2 : STD_LOGIC;
 begin
 	inst_state: state Port Map(
 		clk => clk,
@@ -143,6 +146,7 @@ begin
 		sel_skip => sel_skip,
 		sel_addr => sel_addr,
 		sel_data => sel_data,
+		sel_iot => sel_iot,
 		sel_ir => sel_ir,
 		sel_ma => sel_ma,
 		sel_md => sel_md,
@@ -222,7 +226,11 @@ begin
 			elsif sel_ac = ac_uc then
 				link_ac <= uc_link_ac;
 			elsif sel_ac = ac_iot then
-				link_ac <= link & iot_din;
+				if iot_ac_zero = '1' then
+					link_ac <= link & iot_din;
+				else
+					link_ac <= link & (ac OR iot_din);
+				end if;
 			end if;
 		end if;
 	end process;
@@ -262,10 +270,11 @@ begin
 	end process;
 	md_clear <= '1' when md = "000000000000" else '0';
 
+	iot_skip2 <= '1' when iot_skip = '1' and ir(0) = '1' else '0';
 	with sel_skip select
 	skip <= md_clear when skip_md_clear,
 		uc_skip  when skip_uc,
-		iot_skip when skip_iot,
+		iot_skip2 when skip_iot,
 		'0'      when others;
 
 	-- Decoding OPR instructions
@@ -341,7 +350,7 @@ begin
 	link <= link_ac(12);
 
 	iot_dout <= ac;
-	iot_addr <= ir(8 downto 3);
+	iot_addr <= ir(8 downto 3) when sel_iot = iot_en else "000000";
 	iot_bits <= ir(2 downto 0);
 end behavioral;
 

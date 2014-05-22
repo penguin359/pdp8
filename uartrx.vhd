@@ -59,6 +59,6 @@ begin
 	end process;
 
 	ready <= flag;
-	clearacc <= '0';
+	clearacc <= '1';
 	datain <= data;
 end behavioral;
