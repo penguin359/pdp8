@@ -69,6 +69,42 @@ component IOT_Distributor
 );
 end component;
 
+component uartrx
+    Port( clk : in  STD_LOGIC;
+	  ready : out STD_LOGIC;
+	  clear : in STD_LOGIC;
+	  clearacc : out STD_LOGIC;
+	  dataout : in STD_LOGIC_VECTOR(7 downto 0);
+	  datain : out STD_LOGIC_VECTOR(7 downto 0);
+	  load : in STD_LOGIC
+    );
+end component;
+
+component uarttx
+    Port( clk : in  STD_LOGIC;
+	  ready : out STD_LOGIC;
+	  clear : in STD_LOGIC;
+	  clearacc : out STD_LOGIC;
+	  dataout : in STD_LOGIC_VECTOR(7 downto 0);
+	  datain : out STD_LOGIC_VECTOR(7 downto 0);
+	  load : in STD_LOGIC
+    );
+end component;
+
+signal ready_3 : STD_LOGIC;
+signal clear_3 : STD_LOGIC;
+signal clearacc_3 : STD_LOGIC;
+signal dataout_3 : STD_LOGIC_VECTOR(7 downto 0);
+signal datain_3 : STD_LOGIC_VECTOR(7 downto 0);
+signal load_3 : STD_LOGIC;
+
+signal ready_4 : STD_LOGIC;
+signal clear_4 : STD_LOGIC;
+signal clearacc_4 : STD_LOGIC;
+signal dataout_4 : STD_LOGIC_VECTOR(7 downto 0);
+signal datain_4 : STD_LOGIC_VECTOR(7 downto 0);
+signal load_4 : STD_LOGIC;
+
 
 --Inputs
 signal clk : STD_LOGIC := '0';
@@ -186,19 +222,19 @@ begin
 
 	iot : IOT_Distributor Port Map (
 		-- interface to device 3
-		ready_3 => '0',
-		clear_3 => open,
-		clearacc_3 => '0',
-		dataout_3 => open,
-		datain_3 => "00000000",
-		load_3 => open,
+		ready_3 => ready_3,
+		clear_3 => clear_3,
+		clearacc_3 => clearacc_3,
+		dataout_3 => dataout_3,
+		datain_3 => datain_3,
+		load_3 => load_3,
 		-- interface to device 4
-		ready_4 => '0',
-		clear_4 => open,
-		clearacc_4 => '0',
-		dataout_4 => open,
-		datain_4 => "00000000",
-		load_4 => open,
+		ready_4 => ready_4,
+		clear_4 => clear_4,
+		clearacc_4 => clearacc_4,
+		dataout_4 => dataout_4,
+		datain_4 => datain_4,
+		load_4 => load_4,
 		-- interface to CPU
 		skip_flag => iot_skip,
 		bit1_cp2 => iot_bits(1),
@@ -207,6 +243,26 @@ begin
 		datain => iot_din(7 downto 0),
 		bit2_cp3 => iot_bits(2),
 		io_address => iot_addr(2 downto 0)
+	);
+
+	rx : uartrx Port Map (
+		clk => clk,
+		ready => ready_3,
+		clear => clear_3,
+		clearacc => clearacc_3,
+		dataout => dataout_3,
+		datain => datain_3,
+		load => load_3
+	);
+
+	tx : uarttx Port Map (
+		clk => clk,
+		ready => ready_4,
+		clear => clear_4,
+		clearacc => clearacc_4,
+		dataout => dataout_4,
+		datain => datain_4,
+		load => load_4
 	);
 
 
