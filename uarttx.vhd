@@ -42,16 +42,19 @@ begin
 	variable outline : line;
 	begin
 		wait on clear, load;
-		if clear = '1' then
+		if rising_edge(clear) then
 			flag <= '0';
 		end if;
-		if load = '1' then
+		if rising_edge(load) then
 			--write(outline, Conv_bitvector(dataout), right, 8);
 			--write(L => outline, VALUE => "00");
 			--write(outline, "00");
 			--write(outline, Conv_Integer(dataout));
-			write(outline, Conv_Integer(dataout));
-			writeline(log, outline);
+			--write(outline, Conv_Integer(dataout));
+			--write(outline, character'val(Conv_Integer(dataout)));
+			--write(outline, string'("Goodbye"));
+			--writeline(log, outline);
+			write(log, "" & character'val(Conv_Integer(dataout)));
 			wait for 10 ns;
 			flag <= '1';
 		end if;
