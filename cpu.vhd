@@ -17,7 +17,18 @@ entity cpu is
 	  iot_din : in STD_LOGIC_VECTOR(11 downto 0);
 	  iot_dout : out STD_LOGIC_VECTOR(11 downto 0);
 	  iot_addr : out STD_LOGIC_VECTOR(5 downto 0);
-	  iot_bits : out STD_LOGIC_VECTOR(2 downto 0)
+	  iot_bits : out STD_LOGIC_VECTOR(2 downto 0);
+	  -- Panel to CPU
+	  swreg : in STD_LOGIC_VECTOR(11 downto 0);
+	  dispsel : in STD_LOGIC_VECTOR(1 downto 0);
+	  run : in STD_LOGIC;
+	  loadpc : in STD_LOGIC;
+	  step : in STD_LOGIC;
+	  deposit : in STD_LOGIC;
+	  -- CPU to Panel
+	  dispout : out STD_LOGIC_VECTOR(11 downto 0);
+	  linkout : out STD_LOGIC;
+	  halt : out STD_LOGIC
     );
 end cpu;
 ---------------------------------------------------------------------

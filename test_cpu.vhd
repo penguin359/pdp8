@@ -39,7 +39,34 @@ component cpu
 	  iot_din : in STD_LOGIC_VECTOR(11 downto 0);
 	  iot_dout : out STD_LOGIC_VECTOR(11 downto 0);
 	  iot_addr : out STD_LOGIC_VECTOR(5 downto 0);
-	  iot_bits : out STD_LOGIC_VECTOR(2 downto 0)
+	  iot_bits : out STD_LOGIC_VECTOR(2 downto 0);
+	  -- Panel to CPU
+	  swreg : in STD_LOGIC_VECTOR(11 downto 0);
+	  dispsel : in STD_LOGIC_VECTOR(1 downto 0);
+	  run : in STD_LOGIC;
+	  loadpc : in STD_LOGIC;
+	  step : in STD_LOGIC;
+	  deposit : in STD_LOGIC;
+	  -- CPU to Panel
+	  dispout : out STD_LOGIC_VECTOR(11 downto 0);
+	  linkout : out STD_LOGIC;
+	  halt : out STD_LOGIC
+    );
+end component;
+
+component front_panel
+    Port( clk : in  STD_LOGIC;
+	  -- Panel to CPU
+	  swreg : out STD_LOGIC_VECTOR(11 downto 0);
+	  dispsel : out STD_LOGIC_VECTOR(1 downto 0);
+	  run : out STD_LOGIC;
+	  loadpc : out STD_LOGIC;
+	  step : out STD_LOGIC;
+	  deposit : out STD_LOGIC;
+	  -- CPU to Panel
+	  dispout : in STD_LOGIC_VECTOR(11 downto 0);
+	  linkout : in STD_LOGIC;
+	  halt : in STD_LOGIC
     );
 end component;
 
@@ -90,6 +117,18 @@ component uarttx
 	  load : in STD_LOGIC
     );
 end component;
+
+-- Panel to CPU
+signal swreg : STD_LOGIC_VECTOR(11 downto 0);
+signal dispsel : STD_LOGIC_VECTOR(1 downto 0);
+signal run : STD_LOGIC;
+signal loadpc : STD_LOGIC;
+signal step : STD_LOGIC;
+signal deposit : STD_LOGIC;
+-- CPU to Panel
+signal dispout : STD_LOGIC_VECTOR(11 downto 0);
+signal linkout : STD_LOGIC;
+signal halt : STD_LOGIC;
 
 signal ready_3 : STD_LOGIC;
 signal clear_3 : STD_LOGIC;
@@ -217,8 +256,34 @@ begin
 		iot_din => iot_din,
 		iot_dout => iot_dout,
 		iot_addr => iot_addr,
-		iot_bits => iot_bits
+		iot_bits => iot_bits,
+		-- Panel to CPU
+		swreg => swreg,
+		dispsel => dispsel,
+		run => run,
+		loadpc => loadpc,
+		step => step,
+		deposit => deposit,
+		-- CPU to Panel
+		dispout => dispout,
+		linkout => linkout,
+		halt => halt
         );
+
+	fp: front_panel Port Map (
+		clk => clk,
+		-- Panel to CPU
+		swreg => swreg,
+		dispsel => dispsel,
+		run => run,
+		loadpc => loadpc,
+		step => step,
+		deposit => deposit,
+		-- CPU to Panel
+		dispout => dispout,
+		linkout => linkout,
+		halt => halt
+	);
 
 	iot : IOT_Distributor Port Map (
 		-- interface to device 3
