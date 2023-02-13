@@ -17,6 +17,7 @@
 /ram/
 /db/
 /incremental_db/
+/simulation/
 /output_files/
 /timing/
 /.qsys_edit/
