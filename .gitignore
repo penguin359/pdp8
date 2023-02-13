@@ -1,7 +1,17 @@
+*~
 *.swp
+*.bak
 
+# Altera special files
+*.qws
+*.rpt
+/db/
+/incremental_db/
+/output_files/
+/timing/
+
+# Xilinx special files
 /iseconfig/*.xreport
-
 *.asy
 /*.bgn
 /*.bit
