@@ -5,10 +5,21 @@
 # Altera special files
 *.qws
 *.rpt
+# HTML reports
+*.html
+# Block symbol file
+*.bsf
+# Component definitions
+*.cmp
+# Information for SOPC Builder
+*.sopcinfo
+# Generated RAM block
+/ram/
 /db/
 /incremental_db/
 /output_files/
 /timing/
+/.qsys_edit/
 
 # Xilinx special files
 /iseconfig/*.xreport

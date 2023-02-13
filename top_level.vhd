@@ -17,9 +17,9 @@ component cpu
 	  addr : out STD_LOGIC_VECTOR(11 downto 0);
 	  mem_read : out STD_LOGIC;
 	  mem_write : out STD_LOGIC;
-	  mem_valid : in STD_LOGIC;
-	  en_and : in  STD_LOGIC;
-	  skip   : out STD_LOGIC
+	  mem_valid : in STD_LOGIC
+	  --en_and : in  STD_LOGIC;
+	  --skip   : out STD_LOGIC
     );
 end component;
 
@@ -44,9 +44,9 @@ begin
 		addr => addr,
 		mem_read => mem_read,
 		mem_write => mem_write,
-		mem_valid => mem_valid,
-		en_and => '0',
-		skip => open
+		mem_valid => mem_valid
+		--en_and => '0',
+		--skip => open
 	);
 
 	inst_mem: mem Port Map(
