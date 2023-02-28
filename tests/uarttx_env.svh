@@ -24,5 +24,6 @@ class uarttx_env extends uvm_env;
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
         agent.monitor.port.connect(sb.mon_imp);
+        agent.monitor.port_out.connect(sb.mon_imp_out);
     endfunction
 endclass: uarttx_env

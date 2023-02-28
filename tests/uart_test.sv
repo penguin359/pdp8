@@ -26,7 +26,7 @@ module top;
     uarttx_if vif(clk, nrst);
     uarttx dut(
         .clk(vif.clk),
-        .rst(vif.nrst),
+        .nrst(vif.nrst),
         .tx_load(vif.tx_load),
         .tx_data(vif.tx_data),
         .tx_ready(vif.tx_ready),

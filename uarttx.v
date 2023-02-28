@@ -1,5 +1,5 @@
 module uarttx(
-    input clk, input rst,
+    input clk, input nrst,
 
     input tx_load,
     input [7:0] tx_data,
@@ -21,9 +21,9 @@ module uarttx(
     reg [11:0] shift_reg;
 
     reg [3:0] bit_count;
-    always @(posedge clk or posedge rst)
+    always @(posedge clk or negedge nrst)
     begin
-        if(rst) begin
+        if(!nrst) begin
             shift_reg <= 12'hfff;
             bit_count <= 0;
         end else if(tx_load) begin
@@ -37,9 +37,9 @@ module uarttx(
     assign tx = shift_reg[0];
     assign tx_ready = bit_count == 0 ? 1'b1 : 1'b0;
 
-    always @(posedge clk or posedge rst)
+    always @(posedge clk or negedge nrst)
     begin
-        if(rst)
+        if(!nrst)
             tx_counter <= tx_divider;
         else if(tx_counter == 0)
             tx_counter <= tx_divider;

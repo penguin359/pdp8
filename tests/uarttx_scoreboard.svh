@@ -47,6 +47,10 @@ class uarttx_scoreboard extends uvm_scoreboard;
     function void write_out(uarttx_transaction_out trans_out);
         uarttx_transaction trans;
         `uvm_info("UART_SCOREBOARD", "Scoreboard out!", UVM_LOW)
+        if(queue_in.size() == 0) begin
+            `uvm_error("UART_SCOREBOARD", "Unexpected byte transmitted!")
+            return;
+        end
         trans = queue_in.pop_front();
         if(trans.data == trans_out.data)
             `uvm_info("UART_SCOREBOARD", "Success!", UVM_LOW)
