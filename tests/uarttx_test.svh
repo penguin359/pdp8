@@ -12,11 +12,18 @@ class uarttx_test extends uvm_test;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         env = uarttx_env::type_id::create("env", this);
+        uvm_config_db #(virtual uarttx_if)::set(this, "env", "vif", vif);
+
+        if(!uvm_config_db #(virtual uarttx_if)::get(this, "", "vif", vif)) begin
+            `uvm_error("build_phase", "driver failed to get virtual interface");
+        end
     endfunction
 
     task run_phase(uvm_phase phase);
-        phase.raise_objection(this);
-        #10;
+        uarttx_sequence seq = uarttx_sequence::type_id::create("uarttx_sequence", this);
+        phase.raise_objection(this, "Starting the main TX sequence");
+        seq.start(env.agent.seq);
+        #10000;
         `uvm_warning("", "Hello, Uart!")
         phase.drop_objection(this);
     endtask: run_phase

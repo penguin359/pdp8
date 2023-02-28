@@ -20,5 +20,6 @@ vlog -L uvm {+incdir+../../uvm-1.2/src} -sv {uart_test.sv}
 vsim -sv_lib uvm_dpi top
 
 add wave *
+add wave /vif/driver_cb/*
 
-run
+run -all
