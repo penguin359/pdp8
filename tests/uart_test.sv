@@ -7,7 +7,9 @@ import uvm_pkg::*;
 `include "uarttx_sequence.svh"
 `include "uarttx_sequencer.svh"
 `include "uarttx_driver.svh"
+`include "uarttx_monitor.svh"
 `include "uarttx_agent.svh"
+`include "uarttx_scoreboard.svh"
 `include "uarttx_env.svh"
 `include "uarttx_test.svh"
 
