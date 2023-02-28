@@ -2,3 +2,6 @@
 /uvm/
 /dpi_export.h
 /transcript
+
+*.dll
+*.wlf

@@ -16,3 +16,9 @@ vlog -vlog01compat {../uarttx.v}
 vlog -work uvm +define+UVM_HDL_NO_DPI +incdir+../../uvm-1.2/src -dpiheader dpi_export.h {../../uvm-1.2/src/uvm_pkg.sv}
 
 vlog -L uvm {+incdir+../../uvm-1.2/src} -sv {uart_test.sv}
+
+vsim -sv_lib uvm_dpi top
+
+add wave *
+
+run
