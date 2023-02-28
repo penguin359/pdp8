@@ -1,0 +1,13 @@
+class uarttx_transaction extends uvm_sequence_item;
+    rand bit [7:0] data;
+
+    function new(string name="uarttx_transaction");
+        super.new();
+    endfunction
+
+    function string convert2string();
+        string s;
+        $sformat(s, "char=%c", data);
+        return s;
+    endfunction
+endclass: uarttx_transaction
