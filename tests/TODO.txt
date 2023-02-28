@@ -1,1 +1,7 @@
 Add ifdef protection around all headers
+
+default name and null parent for all components?
+
+dual monitor/drivers/agents?
+
+namespace with package?
