@@ -1,3 +1,5 @@
+`timescale 10ns / 1ns
+
 `include "uvm_macros.svh"
 
 import uvm_pkg::*;
@@ -16,11 +18,13 @@ import uvm_pkg::*;
 module top;
     bit clk, nrst;
 
-    always #5 clk = ~clk;
+    localparam time period = 20ns;
+
+    always #(period/2) clk = ~clk;
 
     initial begin
         nrst = 0;
-        #10 nrst = 1;
+        #(100ns) nrst = 1;
     end
 
     uarttx_if vif(clk, nrst);

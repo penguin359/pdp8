@@ -21,7 +21,7 @@ class uarttx_driver extends uvm_driver #(uarttx_transaction);
             seq_item_port.get_next_item(trans);
             uvm_report_info("UARTTX_DRIVER", "Sending char...");
             //vif.print();
-            uvm_report_info("UARTTX_DRIVER", $psprintf("Is missing? %d", vif == null));
+            uvm_report_info("UARTTX_DRIVER", $sformatf("Is missing? %d", vif == null));
             assert(vif != null);
             @(posedge vif.clk);
             vif.driver_cb.tx_load <= 1;

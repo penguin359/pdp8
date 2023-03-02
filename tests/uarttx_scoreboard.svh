@@ -28,10 +28,7 @@ class uarttx_scoreboard extends uvm_scoreboard;
         if(queue_in.size() == 0)
             `uvm_info("UART_SCOREBOARD", "All bytes were transmitted", UVM_LOW)
         else begin
-            //string s;
-            //$sformat(s, "ERROR: %d bytes were not seen in transmit", queue_in.size());
-            //`uvm_error("UART_SCOREBOARD", s);
-            `uvm_error("UART_SCOREBOARD", $psprintf("ERROR: %d byte(s) were not seen in transmit", queue_in.size()));
+            `uvm_error("UART_SCOREBOARD", $sformatf("ERROR: %d byte(s) were not seen in transmit", queue_in.size()));
         end
     endfunction
 

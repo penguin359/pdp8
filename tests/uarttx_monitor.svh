@@ -1,6 +1,10 @@
 class uarttx_monitor extends uvm_monitor;
     `uvm_component_utils(uarttx_monitor);
 
+    //localparam baud = 115200;
+    localparam baud = 10000000;
+    //localparam bit_time = 1s / baud;
+
     virtual uarttx_if vif;
 
     uvm_analysis_port #(uarttx_transaction) port;
@@ -25,7 +29,6 @@ class uarttx_monitor extends uvm_monitor;
         fork
         forever begin
             uarttx_transaction trans;
-            uarttx_transaction_out trans_out;
             wait(vif.tx_load == 1);
             `uvm_warning("run_phase", "Saw neg edge");
             trans = new;
@@ -34,11 +37,25 @@ class uarttx_monitor extends uvm_monitor;
             wait(vif.tx_load == 0);
         end
         forever begin
+            logic [7:0] rx_reg;
             uarttx_transaction_out trans_out;
-            wait(vif.tx == 0);
-            #50;
+
+            $display("=====> Go!!!!!!!!!!!!!!!!!!");
+            @(negedge vif.tx);
+            $display("=====> Saw edge!!!!!!!!!!!!");
+            #(1s/baud/2);
+            $display("=====> Half bit time!!!!!!!");
+            #(1s/baud/2);
+            $display("=====> Full bit time!!!!!!!");
+            repeat(8)
+            begin
+                #(1s/baud) rx_reg = {vif.tx, rx_reg[7:1]};
+                $display("Bit shift time=%0t bit=0x%0h", $time, vif.tx);
+            end
+            #(1s/baud)
+            $display("Received char time=%0t char=0x%0h", $time, rx_reg);
             trans_out = new;
-            trans_out.data = 8'h01;
+            trans_out.data = rx_reg;
             port_out.write(trans_out);
         end
         join

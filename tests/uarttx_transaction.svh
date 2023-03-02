@@ -6,9 +6,7 @@ class uarttx_transaction extends uvm_sequence_item;
     endfunction
 
     function string convert2string();
-        string s;
-        $sformat(s, "char=%c", data);
-        return s;
+        return $sformatf("char=%c", data);
     endfunction
 endclass: uarttx_transaction
 
@@ -20,8 +18,6 @@ class uarttx_transaction_out extends uvm_sequence_item;
     endfunction
 
     function string convert2string();
-        string s;
-        $sformat(s, "char=%c", data);
-        return s;
+        return $sformatf("char=%c", data);
     endfunction
 endclass: uarttx_transaction_out
