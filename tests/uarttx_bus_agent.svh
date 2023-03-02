@@ -2,7 +2,7 @@ class uarttx_bus_agent extends uvm_agent;
     `uvm_component_utils(uarttx_bus_agent);
 
     uarttx_bus_driver driver;
-    uarttx_sequencer seq;
+    uarttx_bus_sequencer seq;
     uarttx_bus_monitor monitor;
 
     //virtual uarttx_if vif;
@@ -14,7 +14,7 @@ class uarttx_bus_agent extends uvm_agent;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         driver = uarttx_bus_driver::type_id::create("driver", this);
-        seq = uarttx_sequencer::type_id::create("sequencer", this);
+        seq = uarttx_bus_sequencer::type_id::create("sequencer", this);
         monitor = uarttx_bus_monitor::type_id::create("monitor", this);
         //uvm_config_db #(virtual uarttx_if.DRIVER)::set(this, "driver", "vif", vif);
 

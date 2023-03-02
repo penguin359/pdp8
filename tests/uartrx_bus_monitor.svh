@@ -1,7 +1,7 @@
-class uarttx_bus_monitor extends uvm_monitor;
-    `uvm_component_utils(uarttx_bus_monitor);
+class uartrx_bus_monitor extends uvm_monitor;
+    `uvm_component_utils(uartrx_bus_monitor);
 
-    virtual uarttx_bus_if.MONITOR vif;
+    virtual uartrx_bus_if.MONITOR vif;
 
     uart_config uconfig;
 
@@ -15,20 +15,20 @@ class uarttx_bus_monitor extends uvm_monitor;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
-            `uvm_fatal("UARTTX_BUS_MONITOR", "driver failed to get uart configuration");
+            `uvm_fatal("UARTRX_BUS_MONITOR", "driver failed to get uart configuration");
         end
-        vif = uconfig.uarttx_if;
+        vif = uconfig.uartrx_if;
     endfunction
 
     task run_phase(uvm_phase phase);
         super.run_phase(phase);
         forever begin
             uart_transaction trans;
-            wait(vif.monitor_cb.tx_load == 1);
+            wait(vif.monitor_cb.rx_load == 1);
             trans = new;
-            trans.data = vif.monitor_cb.tx_data;
+            trans.data = vif.monitor_cb.rx_data;
             port.write(trans);
-            wait(vif.monitor_cb.tx_load == 0);
+            wait(vif.monitor_cb.rx_load == 0);
         end
     endtask: run_phase
-endclass: uarttx_bus_monitor
+endclass: uartrx_bus_monitor

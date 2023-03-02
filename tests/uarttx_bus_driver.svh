@@ -1,4 +1,4 @@
-class uarttx_bus_driver extends uvm_driver #(uarttx_transaction);
+class uarttx_bus_driver extends uvm_driver #(uart_transaction);
     `uvm_component_utils(uarttx_bus_driver);
 
     uart_config uconfig;
@@ -22,7 +22,7 @@ class uarttx_bus_driver extends uvm_driver #(uarttx_transaction);
         wait(vif.nrst == 1);
         #1
         forever begin
-            uarttx_transaction trans;
+            uart_transaction trans;
             seq_item_port.get_next_item(trans);
             `uvm_info("UARTTX_BUS_DRIVER", $sformatf("Sent char time=%0t char=%c value=0x%02h", $time, trans.data, trans.data), UVM_MEDIUM);
             assert(vif != null);

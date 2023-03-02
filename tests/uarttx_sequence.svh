@@ -1,4 +1,4 @@
-class uarttx_sequence extends uvm_sequence #(uarttx_transaction);
+class uarttx_sequence extends uvm_sequence #(uart_transaction);
     `uvm_object_utils(uarttx_sequence);
 
     function new(string name = "uarttx_sequence");
@@ -6,7 +6,7 @@ class uarttx_sequence extends uvm_sequence #(uarttx_transaction);
     endfunction
 
     task body();
-        uarttx_transaction trans;
+        uart_transaction trans;
         repeat(10) begin
             trans = new;
             start_item(trans);

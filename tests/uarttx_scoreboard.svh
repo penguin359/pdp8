@@ -3,14 +3,14 @@
 class uarttx_scoreboard extends uvm_scoreboard;
     `uvm_component_utils(uarttx_scoreboard);
 
-    uvm_analysis_imp #(uarttx_transaction, uarttx_scoreboard) mon_imp;
-    //uvm_analysis_imp #(uarttx_transaction_out, uarttx_scoreboard) mon_imp_out;
-    uvm_analysis_imp_out #(uarttx_transaction_out, uarttx_scoreboard) mon_imp_out;
+    uvm_analysis_imp #(uart_transaction, uarttx_scoreboard) mon_imp;
+    //uvm_analysis_imp #(uart_transaction_out, uarttx_scoreboard) mon_imp_out;
+    uvm_analysis_imp_out #(uart_transaction_out, uarttx_scoreboard) mon_imp_out;
 
-    //uarttx_transaction trans;
-    //uarttx_transaction_out trans_out;
+    //uart_transaction trans;
+    //uart_transaction_out trans_out;
 
-    uvm_queue #(uarttx_transaction) queue_in;
+    uvm_queue #(uart_transaction) queue_in;
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -32,7 +32,7 @@ class uarttx_scoreboard extends uvm_scoreboard;
         end
     endfunction
 
-    function void write(uarttx_transaction trans);
+    function void write(uart_transaction trans);
         `uvm_info("UART_SCOREBOARD", $sformatf("Scoreboard in: char=%c value=0x%02h", trans.data, trans.data), UVM_LOW)
         queue_in.push_back(trans);
         //if(trans.data == trans.actual)
@@ -41,8 +41,8 @@ class uarttx_scoreboard extends uvm_scoreboard;
         //    `uvm_error("UART_SCOREBOARD", "Failure!")
     endfunction
 
-    function void write_out(uarttx_transaction_out trans_out);
-        uarttx_transaction trans;
+    function void write_out(uart_transaction_out trans_out);
+        uart_transaction trans;
         `uvm_info("UART_SCOREBOARD", "Scoreboard out!", UVM_LOW)
         if(queue_in.size() == 0) begin
             `uvm_error("UART_SCOREBOARD", "Unexpected byte transmitted!")
