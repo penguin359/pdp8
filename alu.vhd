@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity alu is
 	port(
@@ -21,7 +22,9 @@ entity alu is
 end entity alu;
 
 architecture implementation of alu is
+	signal result_acc_link : std_logic_vector(12 downto 0);
 begin
-	result_acc <= "000000000001" when increment = '1' else "000000000000";
-	result_link <= '0';
+	result_acc_link <= std_logic_vector(unsigned(link & acc) + 1) when increment = '1' else "0" & acc;
+	result_acc <= result_acc_link(11 downto 0);
+	result_link <= result_acc_link(12);
 end architecture implementation;

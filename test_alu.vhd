@@ -63,6 +63,24 @@ begin
 		wait for 10 ns;
 		assert result_acc = "000000000001" report "Bad ACC" severity failure;
 		assert result_link = '0' report "Bad Link" severity failure;
+
+		acc <= "000001011111";
+		wait for 10 ns;
+		assert result_acc = "000001100000" report "Bad ACC" severity failure;
+		assert result_link = '0' report "Bad Link" severity failure;
+
+		acc <= "111111111111";
+		wait for 10 ns;
+		assert result_acc = "000000000000" report "Bad ACC" severity failure;
+		assert result_link = '1' report "Bad Link" severity failure;
+
+		acc <= "111111111111";
+		increment <= '0';
+		wait for 10 ns;
+		assert result_acc = "111111111111" report "Bad ACC" severity failure;
+		assert result_link = '0' report "Bad Link" severity failure;
+
+		report "Success!" severity note;
 		wait;
 	end process stimuli;
 end architecture test_bench;
