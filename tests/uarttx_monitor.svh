@@ -2,10 +2,13 @@ class uarttx_monitor extends uvm_monitor;
     `uvm_component_utils(uarttx_monitor);
 
     //localparam baud = 115200;
-    localparam baud = 10000000;
+    //localparam baud = 10000000;
     //localparam bit_time = 1s / baud;
 
-    virtual uarttx_if vif;
+    virtual uarttx_if.MONITOR vif;
+
+
+    uart_config uconfig;
 
     uvm_analysis_port #(uarttx_transaction) port;
     uvm_analysis_port #(uarttx_transaction_out) port_out;
@@ -18,9 +21,13 @@ class uarttx_monitor extends uvm_monitor;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        if(!uvm_config_db #(virtual uarttx_if)::get(this, "", "vif", vif)) begin
-            `uvm_error("build_phase", "driver failed to get virtual interface");
+        //if(!uvm_config_db #(virtual uarttx_if)::get(this, "", "vif", vif)) begin
+        //    `uvm_error("build_phase", "driver failed to get virtual interface");
+        //end
+        if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
+            `uvm_error("build_phase", "driver failed to get uart configuration");
         end
+        vif = uconfig.vif;
     endfunction
 
     task run_phase(uvm_phase phase);
@@ -29,12 +36,12 @@ class uarttx_monitor extends uvm_monitor;
         fork
         forever begin
             uarttx_transaction trans;
-            wait(vif.tx_load == 1);
+            wait(vif.monitor_cb.tx_load == 1);
             `uvm_warning("run_phase", "Saw neg edge");
             trans = new;
-            trans.data = vif.tx_data;
+            trans.data = vif.monitor_cb.tx_data;
             port.write(trans);
-            wait(vif.tx_load == 0);
+            wait(vif.monitor_cb.tx_load == 0);
         end
         forever begin
             logic [7:0] rx_reg;
@@ -42,14 +49,14 @@ class uarttx_monitor extends uvm_monitor;
 
             @(negedge vif.tx);
             phase.raise_objection(this, "Receiving byte over UART");
-            #(1s/baud/2);
+            #(1s/uconfig.baud/2);
             repeat(8)
             begin
-                #(1s/baud) rx_reg = {vif.tx, rx_reg[7:1]};
-                `uvm_info("UARTTX_MONITOR", $sformatf("Bit shift time=%0t bit=0x%0h", $time, vif.tx), UVM_HIGH);
+                #(1s/uconfig.baud) rx_reg = {vif.tx, rx_reg[7:1]};
+                `uvm_info("UARTTX_MONITOR", $sformatf("Bit shift time=%0t bit=0x%02h", $time, vif.tx), UVM_HIGH);
             end
-            #(1s/baud)
-            `uvm_info("UARTTX_MONITOR", $sformatf("Received char time=%0t char=0x%0h", $time, rx_reg), UVM_MEDIUM);
+            #(1s/uconfig.baud)
+            `uvm_info("UARTTX_MONITOR", $sformatf("Received char time=%0t char=%c value=0x%02h", $time, rx_reg, rx_reg), UVM_MEDIUM);
             trans_out = new;
             trans_out.data = rx_reg;
             port_out.write(trans_out);

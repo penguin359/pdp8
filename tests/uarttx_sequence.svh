@@ -11,7 +11,8 @@ class uarttx_sequence extends uvm_sequence #(uarttx_transaction);
             trans = new;
             start_item(trans);
             //assert(trans.randomize());
-            trans.data = $urandom_range(0, 255);
+            // Randomly generate only graphic ASCII characters
+            trans.data = $urandom_range(8'h21, 8'h7e);
             finish_item(trans);
         end
     endtask: body

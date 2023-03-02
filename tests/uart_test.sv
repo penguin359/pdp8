@@ -6,6 +6,7 @@
 package testbench_pkg;
     import uvm_pkg::*;
 
+    `include "uart_config.svh"
     `include "uarttx_transaction.svh"
     `include "uarttx_sequence.svh"
     `include "uarttx_sequencer.svh"
@@ -26,6 +27,8 @@ module top;
     localparam time period = 20ns;
     localparam longint clock_rate = 1s / period;
 
+    localparam int baud = 115200;
+
     always #(period/2) clk = ~clk;
 
     initial begin
@@ -34,7 +37,7 @@ module top;
     end
 
     uarttx_if vif(clk, nrst);
-    uarttx #(.clock_rate(clock_rate), .baud(115200))
+    uarttx #(.clock_rate(clock_rate), .baud(baud))
     dut (
         .clk(vif.clk),
         .nrst(vif.nrst),
@@ -43,9 +46,17 @@ module top;
         .tx_ready(vif.tx_ready),
         .tx(vif.tx));
 
+    uart_config uconfig;
+
     initial begin
+        uconfig = new;
+        uconfig.baud = baud;
+        uconfig.vif = vif;
         uvm_config_db #(virtual uarttx_if)::set(uvm_root::get(), "*", "vif", vif);
         uvm_config_db #(virtual uarttx_if.DRIVER)::set(uvm_root::get(), "*", "vif", vif.DRIVER);
+
+        uvm_config_db #(uart_config)::set(uvm_root::get(), "", "uart_config", uconfig);
+
         $dumpfile("uarttx.vcd");
         $dumpvars;
     end

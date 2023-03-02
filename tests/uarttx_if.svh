@@ -13,9 +13,9 @@ interface uarttx_if(input logic clk, nrst);
     clocking monitor_cb @(posedge clk);
         input tx_load;
         input tx_data;
-//        output tx_ready;
+        input tx_ready;
     endclocking
 
     modport DRIVER (clocking driver_cb, input clk, nrst);
-    modport MONITOR (clocking monitor_cb, input clk, nrst);
+    modport MONITOR (clocking monitor_cb, input clk, nrst, tx);
 endinterface

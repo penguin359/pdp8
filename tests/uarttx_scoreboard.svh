@@ -33,7 +33,7 @@ class uarttx_scoreboard extends uvm_scoreboard;
     endfunction
 
     function void write(uarttx_transaction trans);
-        `uvm_info("UART_SCOREBOARD", "Scoreboard!", UVM_LOW)
+        `uvm_info("UART_SCOREBOARD", $sformatf("Scoreboard in: char=%c value=0x%02h", trans.data, trans.data), UVM_LOW)
         queue_in.push_back(trans);
         //if(trans.data == trans.actual)
         //    `uvm_info("UART_SCOREBOARD", "Success!", UVM_LOW)
@@ -52,6 +52,6 @@ class uarttx_scoreboard extends uvm_scoreboard;
         if(trans.data == trans_out.data)
             `uvm_info("UART_SCOREBOARD", "Success!", UVM_LOW)
         else
-            `uvm_error("UART_SCOREBOARD", "Failure!")
+            `uvm_error("UART_SCOREBOARD", $sformatf("Failure: 0x%02h != 0x%02h", trans.data, trans_out.data))
     endfunction
 endclass: uarttx_scoreboard
