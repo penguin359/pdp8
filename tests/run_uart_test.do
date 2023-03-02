@@ -20,9 +20,10 @@ vlog -L uvm {+incdir+../../uvm-1.2/src} -sv {uart_test.sv}
 vsim -sv_lib uvm_dpi +UVM_VERBOSITY=UVM_HIGH top
 
 add wave *
-add wave /vif/driver_cb/*
-add wave /vif/tx
+add wave /uarttx_if/driver_cb/*
+add wave /serial_if/*
 
-run -all
+#run -all
+run 100 us
 
 wave zoom full

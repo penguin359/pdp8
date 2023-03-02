@@ -2,7 +2,7 @@
 
 `include "uvm_macros.svh"
 
-`include "uarttx_if.svh"
+`include "uart_if.svh"
 package testbench_pkg;
     import uvm_pkg::*;
 
@@ -36,24 +36,29 @@ module top;
         #(100ns) nrst = 1;
     end
 
-    uarttx_if vif(clk, nrst);
+    uartrx_bus_if uartrx_if(clk, nrst);
+    uarttx_bus_if uarttx_if(clk, nrst);
+    uart_if serial_if();
+
     uarttx #(.clock_rate(clock_rate), .baud(baud))
     dut (
-        .clk(vif.clk),
-        .nrst(vif.nrst),
-        .tx_load(vif.tx_load),
-        .tx_data(vif.tx_data),
-        .tx_ready(vif.tx_ready),
-        .tx(vif.tx));
+        .clk(uarttx_if.clk),
+        .nrst(uarttx_if.nrst),
+        .tx_load(uarttx_if.tx_load),
+        .tx_data(uarttx_if.tx_data),
+        .tx_ready(uarttx_if.tx_ready),
+        .tx(serial_if.tx));
 
     uart_config uconfig;
 
     initial begin
         uconfig = new;
         uconfig.baud = baud;
-        uconfig.vif = vif;
-        uvm_config_db #(virtual uarttx_if)::set(uvm_root::get(), "*", "vif", vif);
-        uvm_config_db #(virtual uarttx_if.DRIVER)::set(uvm_root::get(), "*", "vif", vif.DRIVER);
+        uconfig.uartrx_if = uartrx_if;
+        uconfig.uarttx_if = uarttx_if;
+        uconfig.serial_if = serial_if;
+        //uvm_config_db #(virtual uarttx_if)::set(uvm_root::get(), "*", "vif", vif);
+        //uvm_config_db #(virtual uarttx_if.DRIVER)::set(uvm_root::get(), "*", "vif", vif.DRIVER);
 
         uvm_config_db #(uart_config)::set(uvm_root::get(), "", "uart_config", uconfig);
 
@@ -63,7 +68,8 @@ module top;
 
     initial begin
         uvm_root root = uvm_root::get();
-        root.print_topology();
+        root.enable_print_topology = 1;
+        root.finish_on_completion = 0;
         run_test("uarttx_test");
     end
 endmodule: top

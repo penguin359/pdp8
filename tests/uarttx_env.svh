@@ -4,7 +4,7 @@ class uarttx_env extends uvm_env;
     uarttx_agent agent;
     uarttx_scoreboard sb;
 
-    virtual uarttx_if vif;
+    //virtual uarttx_if vif;
 
     function new(string name, uvm_component parent);
         super.new(name, parent);
@@ -14,11 +14,11 @@ class uarttx_env extends uvm_env;
         super.build_phase(phase);
         agent = uarttx_agent::type_id::create("agent", this);
         sb = uarttx_scoreboard::type_id::create("scoreboard", this);
-        uvm_config_db #(virtual uarttx_if)::set(this, "agent", "vif", vif);
+        //uvm_config_db #(virtual uarttx_if)::set(this, "agent", "vif", vif);
 
-        if(!uvm_config_db #(virtual uarttx_if)::get(this, "", "vif", vif)) begin
-            `uvm_error("build_phase", "driver failed to get virtual interface");
-        end
+        //if(!uvm_config_db #(virtual uarttx_if)::get(this, "", "vif", vif)) begin
+        //    `uvm_error("build_phase", "driver failed to get virtual interface");
+        //end
     endfunction
 
     function void connect_phase(uvm_phase phase);
