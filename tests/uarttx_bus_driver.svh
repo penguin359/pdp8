@@ -1,5 +1,5 @@
-class uarttx_driver extends uvm_driver #(uarttx_transaction);
-    `uvm_component_utils(uarttx_driver);
+class uarttx_bus_driver extends uvm_driver #(uarttx_transaction);
+    `uvm_component_utils(uarttx_bus_driver);
 
     uart_config uconfig;
 
@@ -11,11 +11,8 @@ class uarttx_driver extends uvm_driver #(uarttx_transaction);
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        //if(!uvm_config_db #(virtual uarttx_if.DRIVER)::get(this, "", "vif", vif)) begin
-        //    `uvm_error("build_phase", "driver failed to get virtual interface");
-        //end
         if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
-            `uvm_error("build_phase", "driver failed to get uart configuration");
+            `uvm_error("UARTTX_BUS_DRIVER", "driver failed to get uart configuration");
         end
         vif = uconfig.uarttx_if;
     endfunction
@@ -27,7 +24,7 @@ class uarttx_driver extends uvm_driver #(uarttx_transaction);
         forever begin
             uarttx_transaction trans;
             seq_item_port.get_next_item(trans);
-            `uvm_info("UARTTX_DRIVER", $sformatf("Sent char time=%0t char=%c value=0x%02h", $time, trans.data, trans.data), UVM_MEDIUM);
+            `uvm_info("UARTTX_BUS_DRIVER", $sformatf("Sent char time=%0t char=%c value=0x%02h", $time, trans.data, trans.data), UVM_MEDIUM);
             assert(vif != null);
             @(posedge vif.clk);
             vif.driver_cb.tx_load <= 1;
@@ -39,4 +36,4 @@ class uarttx_driver extends uvm_driver #(uarttx_transaction);
             seq_item_port.item_done();
         end
     endtask: run_phase
-endclass: uarttx_driver
+endclass: uarttx_bus_driver

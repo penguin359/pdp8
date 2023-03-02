@@ -22,7 +22,7 @@ class uarttx_test extends uvm_test;
     task run_phase(uvm_phase phase);
         uarttx_sequence seq = uarttx_sequence::type_id::create("uarttx_sequence", this);
         phase.raise_objection(this, "Starting the main TX sequence");
-        seq.start(env.agent.seq);
+        seq.start(env.bus_agent.seq);
         phase.drop_objection(this);
     endtask: run_phase
 endclass: uarttx_test

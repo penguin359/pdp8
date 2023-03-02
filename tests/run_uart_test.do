@@ -24,6 +24,6 @@ add wave /uarttx_if/driver_cb/*
 add wave /serial_if/*
 
 #run -all
-run 100 us
+run 1100 us
 
 wave zoom full

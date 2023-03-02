@@ -27,6 +27,8 @@
 *.wlf
 wlf*
 transcript
+/rtl_work/
+modelsim.ini
 
 # Xilinx special files
 /iseconfig/*.xreport
