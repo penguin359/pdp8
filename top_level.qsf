@@ -53,6 +53,17 @@ set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS COMMAND_MACRO_MODE -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH alu -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_NAME alu -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id alu
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME test_alu -section_id alu
+set_global_assignment -name EDA_TEST_BENCH_FILE test_alu.vhd -section_id alu
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT run_test_alu.do -section_id eda_simulation
+set_global_assignment -name EDA_SIMULATION_RUN_SCRIPT run_test_alu.do -section_id eda_simulation
+set_global_assignment -name VERILOG_FILE uart.v
 set_global_assignment -name QSYS_FILE ram.qsys
 set_global_assignment -name VHDL_FILE uarttx.vhd
 set_global_assignment -name VHDL_FILE uartrx.vhd
@@ -72,14 +83,4 @@ set_global_assignment -name VHDL_FILE cpu.vhd
 set_global_assignment -name VHDL_FILE control.vhd
 set_global_assignment -name VHDL_FILE alu.vhd
 set_global_assignment -name VHDL_TEST_BENCH_FILE test_alu.vhd
-set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
-set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
-set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS COMMAND_MACRO_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH alu -section_id eda_simulation
-set_global_assignment -name EDA_TEST_BENCH_NAME alu -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id alu
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME test_alu -section_id alu
-set_global_assignment -name EDA_TEST_BENCH_FILE test_alu.vhd -section_id alu
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_SETUP_SCRIPT run_test_alu.do -section_id eda_simulation
-set_global_assignment -name EDA_SIMULATION_RUN_SCRIPT run_test_alu.do -section_id eda_simulation
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
