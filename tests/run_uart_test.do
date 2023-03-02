@@ -17,9 +17,12 @@ vlog -work uvm +define+UVM_HDL_NO_DPI +incdir+../../uvm-1.2/src -dpiheader dpi_e
 
 vlog -L uvm {+incdir+../../uvm-1.2/src} -sv {uart_test.sv}
 
-vsim -sv_lib uvm_dpi top
+vsim -sv_lib uvm_dpi +UVM_VERBOSITY=UVM_HIGH top
 
 add wave *
 add wave /vif/driver_cb/*
+add wave /vif/tx
 
 run -all
+
+wave zoom full

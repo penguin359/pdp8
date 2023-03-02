@@ -40,23 +40,20 @@ class uarttx_monitor extends uvm_monitor;
             logic [7:0] rx_reg;
             uarttx_transaction_out trans_out;
 
-            $display("=====> Go!!!!!!!!!!!!!!!!!!");
             @(negedge vif.tx);
-            $display("=====> Saw edge!!!!!!!!!!!!");
+            phase.raise_objection(this, "Receiving byte over UART");
             #(1s/baud/2);
-            $display("=====> Half bit time!!!!!!!");
-            #(1s/baud/2);
-            $display("=====> Full bit time!!!!!!!");
             repeat(8)
             begin
                 #(1s/baud) rx_reg = {vif.tx, rx_reg[7:1]};
-                $display("Bit shift time=%0t bit=0x%0h", $time, vif.tx);
+                `uvm_info("UARTTX_MONITOR", $sformatf("Bit shift time=%0t bit=0x%0h", $time, vif.tx), UVM_HIGH);
             end
             #(1s/baud)
-            $display("Received char time=%0t char=0x%0h", $time, rx_reg);
+            `uvm_info("UARTTX_MONITOR", $sformatf("Received char time=%0t char=0x%0h", $time, rx_reg), UVM_MEDIUM);
             trans_out = new;
             trans_out.data = rx_reg;
             port_out.write(trans_out);
+            phase.drop_objection(this);
         end
         join
     endtask: run_phase
