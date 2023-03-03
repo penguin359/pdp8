@@ -5,7 +5,7 @@ class uart_monitor extends uvm_monitor;
 
     uart_config uconfig;
 
-    uvm_analysis_port #(uart_transaction_out) port;
+    uvm_analysis_port #(uart_transaction) port;
 
     function new(string name = "uart_monitor", uvm_component parent = null);
         super.new(name, parent);
@@ -24,7 +24,7 @@ class uart_monitor extends uvm_monitor;
         super.run_phase(phase);
         forever begin
             logic [7:0] rx_reg;
-            uart_transaction_out trans;
+            uart_transaction trans;
 
             @(negedge vif.tx);
             phase.raise_objection(this, "Receiving byte over UART");

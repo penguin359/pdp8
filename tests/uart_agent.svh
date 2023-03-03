@@ -22,6 +22,9 @@ class uart_agent extends uvm_agent;
         if(uconfig.active == UVM_ACTIVE) begin
             driver = uart_driver::type_id::create("driver", this);
             seq = uart_sequencer::type_id::create("sequencer", this);
+	    `uvm_info("UART_AGENT", "UART Agent Active", UVM_MEDIUM);
+        end else begin
+	    `uvm_info("UART_AGENT", "UART Agent Passive", UVM_MEDIUM);
         end
         monitor = uart_monitor::type_id::create("monitor", this);
     endfunction

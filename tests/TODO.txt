@@ -5,3 +5,5 @@ default name and null parent for all components?
 dual monitor/drivers/agents?
 
 namespace with package?
+
+name/parent defaults

@@ -4,11 +4,7 @@ class uarttx_scoreboard extends uvm_scoreboard;
     `uvm_component_utils(uarttx_scoreboard);
 
     uvm_analysis_imp #(uart_transaction, uarttx_scoreboard) mon_imp;
-    //uvm_analysis_imp #(uart_transaction_out, uarttx_scoreboard) mon_imp_out;
-    uvm_analysis_imp_out #(uart_transaction_out, uarttx_scoreboard) mon_imp_out;
-
-    //uart_transaction trans;
-    //uart_transaction_out trans_out;
+    uvm_analysis_imp_out #(uart_transaction, uarttx_scoreboard) mon_imp_out;
 
     uvm_queue #(uart_transaction) queue_in;
 
@@ -41,7 +37,7 @@ class uarttx_scoreboard extends uvm_scoreboard;
         //    `uvm_error("UART_SCOREBOARD", "Failure!")
     endfunction
 
-    function void write_out(uart_transaction_out trans_out);
+    function void write_out(uart_transaction trans_out);
         uart_transaction trans;
         `uvm_info("UART_SCOREBOARD", "Scoreboard out!", UVM_LOW)
         if(queue_in.size() == 0) begin

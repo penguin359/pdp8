@@ -9,15 +9,3 @@ class uart_transaction extends uvm_sequence_item;
         return $sformatf("char=%c", data);
     endfunction
 endclass: uart_transaction
-
-class uart_transaction_out extends uvm_sequence_item;
-    logic [7:0] data;
-
-    function new(string name="uart_transaction_out");
-        super.new();
-    endfunction
-
-    function string convert2string();
-        return $sformatf("char=%c", data);
-    endfunction
-endclass: uart_transaction_out

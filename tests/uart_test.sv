@@ -63,8 +63,7 @@ module top;
         uconfig.uartrx_if = uartrx_if;
         uconfig.uarttx_if = uarttx_if;
         uconfig.serial_if = serial_if;
-        //uvm_config_db #(virtual uarttx_if)::set(uvm_root::get(), "*", "vif", vif);
-        //uvm_config_db #(virtual uarttx_if.DRIVER)::set(uvm_root::get(), "*", "vif", vif.DRIVER);
+        uconfig.active = UVM_PASSIVE;
 
         uvm_config_db #(uart_config)::set(uvm_root::get(), "", "uart_config", uconfig);
 
