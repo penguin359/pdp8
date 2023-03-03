@@ -5,8 +5,11 @@ class uart_driver extends uvm_driver #(uart_transaction);
 
     virtual uart_if.DRIVER vif;
 
+    uvm_analysis_port #(uart_transaction) port;
+
     function new(string name, uvm_component parent);
         super.new(name, parent);
+        port = new("analysis_port", this);
     endfunction
 
     function void build_phase(uvm_phase phase);
@@ -30,6 +33,7 @@ class uart_driver extends uvm_driver #(uart_transaction);
 
             seq_item_port.get_next_item(trans);
             `uvm_info("UART_DRIVER", $sformatf("RX Sent char time=%0t char=%c value=0x%02h", $time, trans.data, trans.data), UVM_MEDIUM);
+            port.write(trans);
             shift_reg = trans.data;
             vif.rx = 1'b0;
             #(1s/uconfig.baud);

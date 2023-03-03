@@ -19,6 +19,6 @@ class uartrx_env extends uvm_env;
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
         bus_agent.monitor.port.connect(sb.mon_imp_out);
-        external_agent.monitor.port.connect(sb.mon_imp);
+        external_agent.driver.port.connect(sb.mon_imp);
     endfunction
 endclass: uartrx_env

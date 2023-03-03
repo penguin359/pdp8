@@ -13,7 +13,7 @@ class uartrx_test extends uvm_test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        uarttx_sequence seq = uarttx_sequence::type_id::create("uarttx_sequence", this);
+        uarttx_sequence seq = uarttx_sequence::type_id::create("uartrx_sequence", this);
         phase.raise_objection(this, "Starting the main RX sequence");
         seq.start(env.external_agent.seq);
         phase.drop_objection(this);

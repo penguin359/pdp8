@@ -20,6 +20,8 @@ package testbench_pkg;
     `include "uart_monitor.svh"
     `include "uart_agent.svh"
     `include "uarttx_scoreboard.svh"
+    `include "uartrx_env.svh"
+    `include "uartrx_test.svh"
     `include "uarttx_env.svh"
     `include "uarttx_test.svh"
 endpackage: testbench_pkg
@@ -75,6 +77,11 @@ module top;
         uvm_root root = uvm_root::get();
         root.enable_print_topology = 1;
         root.finish_on_completion = 0;
+`ifdef UART_TX_TEST
         run_test("uarttx_test");
+`else
+        uconfig.active = UVM_ACTIVE;
+        run_test("uartrx_test");
+`endif
     end
 endmodule: top
