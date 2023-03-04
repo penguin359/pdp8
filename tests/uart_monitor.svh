@@ -15,7 +15,7 @@ class uart_monitor extends uvm_monitor;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
-            `uvm_error("UART_MONITOR", "driver failed to get uart configuration");
+            `uvm_fatal("UART_MONITOR", "driver failed to get uart configuration");
         end
         vif = uconfig.serial_if;
     endfunction

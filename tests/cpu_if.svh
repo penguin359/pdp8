@@ -30,12 +30,9 @@ interface cpu_if(input logic clk, nrst);
     clocking driver_cb @(posedge clk);
         output swreg;
         output dispsel;
-
         output run;
         output loadpc;
-
         output step;
-
         output deposit;
 
         //input dispout;
@@ -63,12 +60,9 @@ interface cpu_if(input logic clk, nrst);
     clocking monitor_cb @(posedge clk);
         //input swreg;
         //input dispsel;
-
         //input run;
         //input loadpc;
-
         //input step;
-
         //input deposit;
 
         input dispout;

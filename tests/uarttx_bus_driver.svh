@@ -12,7 +12,7 @@ class uarttx_bus_driver extends uvm_driver #(uart_transaction);
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
-            `uvm_error("UARTTX_BUS_DRIVER", "driver failed to get uart configuration");
+            `uvm_fatal("UARTTX_BUS_DRIVER", "driver failed to get uart configuration");
         end
         vif = uconfig.uarttx_if;
     endfunction

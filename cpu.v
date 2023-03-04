@@ -172,8 +172,8 @@ wire mem_read, mem_write;
         .sel_md(sel_md),
         .mem_read(mem_read),
         .mem_write(mem_write),
-        .mem_valid(mem_ready)
-        //.halted(...)
+        .mem_valid(mem_ready),
+        .halted(halt)
     );
 
     always @* case(sel_addr)

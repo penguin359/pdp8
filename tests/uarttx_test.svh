@@ -15,7 +15,7 @@ class uarttx_test extends uvm_test;
         //uvm_config_db #(virtual uarttx_if)::set(this, "env", "vif", vif);
 
         //if(!uvm_config_db #(virtual uarttx_if)::get(this, "", "vif", vif)) begin
-        //    `uvm_error("build_phase", "driver failed to get virtual interface");
+        //    `uvm_fatal("UARTTX_TEST", "driver failed to get virtual interface");
         //end
     endfunction
 
