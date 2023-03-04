@@ -36,6 +36,9 @@ class cpu_monitor extends uvm_monitor;
             trans.addr = vif.monitor_cb.address;
             trans.data = vif.monitor_cb.read_data;
             port.write(trans);
+            //`uvm_info("CPU_MONITOR", $sformatf("Bus TXN: %p", trans), UVM_MEDIUM);
+            `uvm_info("CPU_MONITOR", $sformatf("Bus TXN: %s", trans.convert2string()), UVM_MEDIUM);
+            trans.print();
         end
     endtask: run_phase
 endclass: cpu_monitor

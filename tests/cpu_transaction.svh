@@ -2,6 +2,8 @@ class cpu_transaction extends uvm_sequence_item;
     rand bit [11:0] addr;
     rand bit [11:0] data;
 
+    enum { TXN_INSTR, TXN_DATA, TXN_ADDRESS } value_type;
+
     typedef logic [2:0] opcode_bits_t;
     typedef enum opcode_bits_t {
         AND=3'b000,
@@ -14,14 +16,31 @@ class cpu_transaction extends uvm_sequence_item;
         OPR=3'b111
     } opcode_t;
 
-    enum { DATA, CODE } value_type = DATA;
-
     function new(string name="cpu_transaction");
         super.new();
     endfunction
 
     function string convert2string();
-        return $sformatf("char=%c", data);
+        case(value_type)
+            TXN_INSTR: begin
+                string opcode;
+                case(this.get_opcode())
+                    AND: opcode = "AND";
+                    TAD: opcode = "TAD";
+                    ISZ: opcode = "ISZ";
+                    DCA: opcode = "DCA";
+                    JMS: opcode = "JMS";
+                    JMP: opcode = "JMP";
+                    IOT: opcode = "IOT";
+                    OPR: opcode = "OPR";
+                endcase
+
+                return $sformatf("OP: addr=0x%03h %s i=%d z=%d offset=0x%02h", addr, opcode,
+                    this.is_indirect(), this.is_zero_page(), this.get_offset());
+            end
+            TXN_DATA: return $sformatf("DATA: addr=0x%03h value=0x%03h", addr, data);
+            TXN_ADDRESS: return $sformatf("ADDRESS: addr=0x%03h value=0x%03h", addr, data);
+        endcase
     endfunction
 
     function logic [6:0] get_offset();
@@ -29,6 +48,7 @@ class cpu_transaction extends uvm_sequence_item;
     endfunction
 
     function void set_offset(logic [6:0] offset);
+        value_type = TXN_INSTR;
         data[6:0] = offset;
     endfunction
 
@@ -37,6 +57,7 @@ class cpu_transaction extends uvm_sequence_item;
     endfunction
 
     function void set_zero_page(bit zero_page);
+        value_type = TXN_INSTR;
         data[7] = zero_page;
     endfunction
 
@@ -45,6 +66,7 @@ class cpu_transaction extends uvm_sequence_item;
     endfunction
 
     function void set_indirect(bit indirect);
+        value_type = TXN_INSTR;
         data[8] = indirect;
     endfunction
 
@@ -53,6 +75,17 @@ class cpu_transaction extends uvm_sequence_item;
     endfunction
 
     function void set_opcode(opcode_t opcode);
+        value_type = TXN_INSTR;
         data[11:9] = opcode_bits_t'(opcode);
+    endfunction
+
+    function void set_data(logic [11:0] value);
+        value_type = TXN_DATA;
+        data[11:0] = value;
+    endfunction
+
+    function void set_address(logic [11:0] value);
+        value_type = TXN_ADDRESS;
+        data[11:0] = value;
     endfunction
 endclass: cpu_transaction

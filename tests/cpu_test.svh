@@ -16,6 +16,7 @@ class cpu_test extends uvm_test;
         cpu_sequence seq = cpu_sequence::type_id::create("cpu_sequence", this);
         phase.raise_objection(this, "Starting the main CPU sequence");
         seq.start(env.agent.seq);
+        `uvm_info("CPU_TEST", "Sequence complete", UVM_MEDIUM);
         phase.drop_objection(this);
     endtask: run_phase
 endclass: cpu_test

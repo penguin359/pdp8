@@ -51,6 +51,7 @@ class cpu_driver extends uvm_driver #(cpu_transaction);
 	    vif.driver_cb.mem_ready <= 1'b1;
             @(posedge vif.clk)
 	    vif.driver_cb.mem_ready <= 1'b0;
+            @(posedge vif.clk)
             seq_item_port.item_done();
         end
     endtask: run_phase
