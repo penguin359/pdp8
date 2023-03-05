@@ -5,8 +5,11 @@ class cpu_scoreboard extends uvm_scoreboard;
 
     //uvm_queue #(cpu_transaction) queue_in;
 
+    cpu_reference cpu_ref;
+
     function new(string name = "cpu_scoreboard", uvm_component parent = null);
         super.new(name, parent);
+        cpu_ref = new;
     endfunction
 
     function void build_phase(uvm_phase phase);
@@ -25,7 +28,8 @@ class cpu_scoreboard extends uvm_scoreboard;
     endfunction
 
     function void write(cpu_transaction trans);
-        `uvm_info("CPU_SCOREBOARD", $sformatf("Scoreboard in: value=0x%03h", trans.data), UVM_LOW)
+        `uvm_info("CPU_SCOREBOARD", $sformatf("Scoreboard in: value=0x%03h", trans.read_data), UVM_LOW)
+        cpu_ref.handle_txn(trans);
         //queue_in.push_back(trans);
     endfunction
 endclass: cpu_scoreboard

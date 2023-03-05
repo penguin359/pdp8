@@ -13,6 +13,7 @@ package cpu_testbench;
     `include "cpu_driver.svh"
     `include "cpu_monitor.svh"
     `include "cpu_agent.svh"
+    `include "cpu_reference.svh"
     `include "cpu_scoreboard.svh"
     `include "cpu_env.svh"
     `include "cpu_test.svh"

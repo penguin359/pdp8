@@ -22,7 +22,7 @@ vlog -work uvm +define+UVM_HDL_NO_DPI +incdir+../../uvm-1.2/src -dpiheader dpi_e
 
 vlog -L uvm {+incdir+../../uvm-1.2/src} -sv {cpu_tb_top.sv}
 
-vsim -sv_lib uvm_dpi +UVM_VERBOSITY=UVM_HIGH cpu_tb_top
+vsim -classdebug -sv_lib uvm_dpi +UVM_VERBOSITY=UVM_HIGH cpu_tb_top
 
 add wave *
 #add wave /uarttx_if/driver_cb/*

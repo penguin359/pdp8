@@ -34,11 +34,13 @@ class cpu_monitor extends uvm_monitor;
             @(posedge vif.clk && vif.monitor_cb.mem_load && vif.monitor_cb.mem_ready);
             trans = new;
             trans.addr = vif.monitor_cb.address;
-            trans.data = vif.monitor_cb.read_data;
+            trans.read_data = vif.monitor_cb.read_data;
+            trans.write_data = vif.monitor_cb.write_data;
+            trans.write_access = vif.monitor_cb.write_enable;
             port.write(trans);
             //`uvm_info("CPU_MONITOR", $sformatf("Bus TXN: %p", trans), UVM_MEDIUM);
             `uvm_info("CPU_MONITOR", $sformatf("Bus TXN: %s", trans.convert2string()), UVM_MEDIUM);
-            trans.print();
+            //trans.print();
         end
     endtask: run_phase
 endclass: cpu_monitor

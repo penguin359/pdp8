@@ -1,6 +1,9 @@
 class cpu_transaction extends uvm_sequence_item;
     rand bit [11:0] addr;
-    rand bit [11:0] data;
+    rand bit [11:0] read_data;
+    rand bit [11:0] write_data;
+
+    bit write_access;
 
     enum { TXN_INSTR, TXN_DATA, TXN_ADDRESS } value_type;
 
@@ -38,54 +41,54 @@ class cpu_transaction extends uvm_sequence_item;
                 return $sformatf("OP: addr=0x%03h %s i=%d z=%d offset=0x%02h", addr, opcode,
                     this.is_indirect(), this.is_zero_page(), this.get_offset());
             end
-            TXN_DATA: return $sformatf("DATA: addr=0x%03h value=0x%03h", addr, data);
-            TXN_ADDRESS: return $sformatf("ADDRESS: addr=0x%03h value=0x%03h", addr, data);
+            TXN_DATA: return $sformatf("DATA: addr=0x%03h value=0x%03h", addr, read_data);
+            TXN_ADDRESS: return $sformatf("ADDRESS: addr=0x%03h value=0x%03h", addr, read_data);
         endcase
     endfunction
 
     function logic [6:0] get_offset();
-        return data[6:0];
+        return read_data[6:0];
     endfunction
 
     function void set_offset(logic [6:0] offset);
         value_type = TXN_INSTR;
-        data[6:0] = offset;
+        read_data[6:0] = offset;
     endfunction
 
     function bit is_zero_page();
-        return data[7] == 1 ? 1'b1 : 1'b0;
+        return read_data[7] == 1 ? 1'b1 : 1'b0;
     endfunction
 
     function void set_zero_page(bit zero_page);
         value_type = TXN_INSTR;
-        data[7] = zero_page;
+        read_data[7] = zero_page;
     endfunction
 
     function bit is_indirect();
-        return data[8] == 1 ? 1'b1 : 1'b0;
+        return read_data[8] == 1 ? 1'b1 : 1'b0;
     endfunction
 
     function void set_indirect(bit indirect);
         value_type = TXN_INSTR;
-        data[8] = indirect;
+        read_data[8] = indirect;
     endfunction
 
     function opcode_t get_opcode();
-        return opcode_t'(data[11:9]);
+        return opcode_t'(read_data[11:9]);
     endfunction
 
     function void set_opcode(opcode_t opcode);
         value_type = TXN_INSTR;
-        data[11:9] = opcode_bits_t'(opcode);
+        read_data[11:9] = opcode_bits_t'(opcode);
     endfunction
 
     function void set_data(logic [11:0] value);
         value_type = TXN_DATA;
-        data[11:0] = value;
+        read_data[11:0] = value;
     endfunction
 
     function void set_address(logic [11:0] value);
         value_type = TXN_ADDRESS;
-        data[11:0] = value;
+        read_data[11:0] = value;
     endfunction
 endclass: cpu_transaction
