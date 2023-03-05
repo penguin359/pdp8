@@ -100,8 +100,11 @@ class cpu_reference;
                     isz_data = trans.read_data + 1;
                     state = WRITE_DATA;
                 end else if(state == WRITE_DATA) begin
-                    cpu_assert(trans.write_data, isz_data, "Write executed when read expected");
-                    pc = pc + 1;
+                    cpu_assert(trans.write_data, isz_data, "Incorrect data written back for ISZ");
+                    if(isz_data == 12'b0)
+                        pc = pc + 2;
+                    else
+                        pc = pc + 1;
                     state = READ_INSTR;
                 end else begin
                     state = READ_DATA;
@@ -119,7 +122,7 @@ class cpu_reference;
             end
             OPCODE_JMS: begin
                 if(state == WRITE_DATA) begin
-                    cpu_assert(trans.write_data, data_addr, "Incorrect data written in JMS");
+                    cpu_assert(trans.write_data, pc+1, "Incorrect data written in JMS");
                     pc = data_addr+1;
                     state = READ_INSTR;
                 end else begin

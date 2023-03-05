@@ -28,9 +28,32 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
             if(txn.is_indirect()) begin
                 txn = new;
                 start_item(txn);
-                txn.set_address($urandom_range(0, 4095));
+                // Skip over the auto-index memory locations
+                txn.set_address($urandom_range(16, 4095));
                 finish_item(txn);
             end
+
+            txn = new;
+            start_item(txn);
+            txn.set_opcode(txn.JMS);
+            txn.set_zero_page($urandom_range(0, 1));
+            txn.set_indirect($urandom_range(0, EnableIndirect));
+            txn.set_offset($urandom_range(0, 127));
+            finish_item(txn);
+
+            if(txn.is_indirect()) begin
+                txn = new;
+                start_item(txn);
+                // Skip over the auto-index memory locations
+                txn.set_address($urandom_range(16, 4095));
+                finish_item(txn);
+            end
+
+            // Data write for JMS
+            txn = new;
+            start_item(txn);
+            txn.set_write_data($urandom_range(0, 4095));
+            finish_item(txn);
 
             repeat(3) begin
                 txn = new;
@@ -44,15 +67,45 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
                 if(txn.is_indirect()) begin
                     txn = new;
                     start_item(txn);
-                    txn.set_address($urandom_range(0, 4095));
+                    txn.set_address($urandom_range(16, 4095));
                     finish_item(txn);
                 end
 
+                // Data read for TAD
                 txn = new;
                 start_item(txn);
                 txn.set_read_data($urandom_range(0, 4095));
                 finish_item(txn);
             end
+
+            // Attempt ISZ in-between TAD and AND to confirm AC is not
+            // being modified.
+            txn = new;
+            start_item(txn);
+            txn.set_opcode(txn.ISZ);
+            txn.set_zero_page($urandom_range(0, 1));
+            txn.set_indirect($urandom_range(0, EnableIndirect));
+            txn.set_offset($urandom_range(0, 127));
+            finish_item(txn);
+
+            if(txn.is_indirect()) begin
+                txn = new;
+                start_item(txn);
+                txn.set_address($urandom_range(16, 4095));
+                finish_item(txn);
+            end
+
+            // Data read for ISZ
+            txn = new;
+            start_item(txn);
+            txn.set_read_data($urandom_range(0, 4095));
+            finish_item(txn);
+
+            // Data write of incremented value for ISZ
+            txn = new;
+            start_item(txn);
+            txn.set_write_data($urandom_range(0, 4095));
+            finish_item(txn);
 
             txn = new;
             start_item(txn);
@@ -65,10 +118,11 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
             if(txn.is_indirect()) begin
                 txn = new;
                 start_item(txn);
-                txn.set_address($urandom_range(0, 4095));
+                txn.set_address($urandom_range(16, 4095));
                 finish_item(txn);
             end
 
+            // Data read for AND
             txn = new;
             start_item(txn);
             txn.set_read_data($urandom_range(0, 4095));
@@ -90,10 +144,11 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
                 if(txn.is_indirect()) begin
                     txn = new;
                     start_item(txn);
-                    txn.set_address($urandom_range(0, 4095));
+                    txn.set_address($urandom_range(16, 4095));
                     finish_item(txn);
                 end
 
+                // Data write for DCA
                 txn = new;
                 start_item(txn);
                 txn.set_write_data($urandom_range(0, 4095));
