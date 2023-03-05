@@ -14,7 +14,9 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
         if(!EnableIndirect)
             `uvm_warning("CPU_SEQUENCE", "Indirect addressing test disabled")
 
-        repeat(5) begin
+        repeat(10) begin
+            // Jump first so later instructions operate from an arbitrary
+            // address.
             txn = new;
             start_item(txn);
             txn.set_opcode(txn.JMP);
@@ -54,7 +56,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
 
             txn = new;
             start_item(txn);
-            txn.set_opcode(txn.DCA);
+            txn.set_opcode(txn.AND);
             txn.set_zero_page($urandom_range(0, 1));
             txn.set_indirect($urandom_range(0, EnableIndirect));
             txn.set_offset($urandom_range(0, 127));
@@ -69,8 +71,34 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
 
             txn = new;
             start_item(txn);
-            txn.set_write_data($urandom_range(0, 4095));
+            txn.set_read_data($urandom_range(0, 4095));
             finish_item(txn);
+
+            // Testing DCA ensures that above TAD/AND instructions
+            // saved the correct value to the accumulator in addition
+            // to testing DCA itself. Calling DCA twice verifies that
+            // it is clearing the accumulator.
+            repeat(2) begin
+                txn = new;
+                start_item(txn);
+                txn.set_opcode(txn.DCA);
+                txn.set_zero_page($urandom_range(0, 1));
+                txn.set_indirect($urandom_range(0, EnableIndirect));
+                txn.set_offset($urandom_range(0, 127));
+                finish_item(txn);
+
+                if(txn.is_indirect()) begin
+                    txn = new;
+                    start_item(txn);
+                    txn.set_address($urandom_range(0, 4095));
+                    finish_item(txn);
+                end
+
+                txn = new;
+                start_item(txn);
+                txn.set_write_data($urandom_range(0, 4095));
+                finish_item(txn);
+            end
         end
 
         // Generate a series of no-ops at the end to ensure that
