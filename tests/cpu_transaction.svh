@@ -1,22 +1,22 @@
 class cpu_transaction extends uvm_sequence_item;
+    `include "pdp8.vh"
+
     rand bit [11:0] addr;
     rand bit [11:0] read_data;
     rand bit [11:0] write_data;
 
-    bit write_access;
-
-    enum { TXN_INSTR, TXN_DATA, TXN_ADDRESS } value_type;
+    enum { TXN_INSTR, TXN_ADDRESS, TXN_READ, TXN_WRITE } value_type;
 
     typedef logic [2:0] opcode_bits_t;
     typedef enum opcode_bits_t {
-        AND=3'b000,
-        TAD=3'b001,
-        ISZ=3'b010,
-        DCA=3'b011,
-        JMS=3'b100,
-        JMP=3'b101,
-        IOT=3'b110,
-        OPR=3'b111
+        AND=OPCODE_AND,
+        TAD=OPCODE_TAD,
+        ISZ=OPCODE_ISZ,
+        DCA=OPCODE_DCA,
+        JMS=OPCODE_JMS,
+        JMP=OPCODE_JMP,
+        IOT=OPCODE_IOT,
+        OPR=OPCODE_OPR
     } opcode_t;
 
     function new(string name="cpu_transaction");
@@ -41,8 +41,9 @@ class cpu_transaction extends uvm_sequence_item;
                 return $sformatf("OP: addr=0x%03h %s i=%d z=%d offset=0x%02h", addr, opcode,
                     this.is_indirect(), this.is_zero_page(), this.get_offset());
             end
-            TXN_DATA: return $sformatf("DATA: addr=0x%03h value=0x%03h", addr, read_data);
             TXN_ADDRESS: return $sformatf("ADDRESS: addr=0x%03h value=0x%03h", addr, read_data);
+            TXN_READ: return $sformatf("READ: addr=0x%03h value=0x%03h", addr, read_data);
+            TXN_WRITE: return $sformatf("WRITE: addr=0x%03h value=0x%03h", addr, read_data);
         endcase
     endfunction
 
@@ -56,21 +57,21 @@ class cpu_transaction extends uvm_sequence_item;
     endfunction
 
     function bit is_zero_page();
-        return read_data[7] == 1 ? 1'b1 : 1'b0;
+        return read_data[Z_BIT] == 1 ? 1'b1 : 1'b0;
     endfunction
 
     function void set_zero_page(bit zero_page);
         value_type = TXN_INSTR;
-        read_data[7] = zero_page;
+        read_data[Z_BIT] = zero_page;
     endfunction
 
     function bit is_indirect();
-        return read_data[8] == 1 ? 1'b1 : 1'b0;
+        return read_data[I_BIT] == 1 ? 1'b1 : 1'b0;
     endfunction
 
     function void set_indirect(bit indirect);
         value_type = TXN_INSTR;
-        read_data[8] = indirect;
+        read_data[I_BIT] = indirect;
     endfunction
 
     function opcode_t get_opcode();
@@ -82,13 +83,22 @@ class cpu_transaction extends uvm_sequence_item;
         read_data[11:9] = opcode_bits_t'(opcode);
     endfunction
 
-    function void set_data(logic [11:0] value);
-        value_type = TXN_DATA;
-        read_data[11:0] = value;
-    endfunction
-
     function void set_address(logic [11:0] value);
         value_type = TXN_ADDRESS;
         read_data[11:0] = value;
+    endfunction
+
+    function void set_read_data(logic [11:0] value);
+        value_type = TXN_READ;
+        read_data[11:0] = value;
+    endfunction
+
+    function bit is_write();
+        return (value_type == TXN_WRITE) ? 1'b1 : 1'b0;
+    endfunction
+
+    function void set_write_data(logic [11:0] value);
+        value_type = TXN_WRITE;
+        write_data[11:0] = value;
     endfunction
 endclass: cpu_transaction

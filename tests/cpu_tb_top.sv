@@ -97,7 +97,7 @@ module cpu_tb_top;
     end
 
     initial begin
-        uvm_root root = uvm_root::get();
+        automatic uvm_root root = uvm_root::get();
         root.enable_print_topology = 1;
         run_test("cpu_test");
     end

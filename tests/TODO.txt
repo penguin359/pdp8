@@ -1,4 +1,6 @@
 Add ifdef protection around all headers
+    Generally appears to be recommended against.
+    Can falsy mask out code if included in multiple namespaces.
 
 default name and null parent for all components?
 
@@ -7,3 +9,11 @@ dual monitor/drivers/agents?
 namespace with package?
 
 name/parent defaults
+
+check on precise timing for CPU driver/monitor (Use clock edge+1?)
+Use standard constants for CPU opcodes/flags
+Pass down interface/config between components in tree
+sequence for file i/o for uart
+move around tlm1/2 ports?
+Make CPU pure Verilog-2001
+  Drop enums into constants

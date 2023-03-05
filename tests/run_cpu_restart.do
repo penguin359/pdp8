@@ -1,7 +1,7 @@
 vlog -work work -sv {+incdir+..} {../state.v}
 vlog -work work -sv {+incdir+..} {../cpu.v}
 
-vlog -L uvm {+incdir+../../uvm-1.2/src} -sv {cpu_tb_top.sv}
+vlog -L uvm {+incdir+..} {+incdir+../../uvm-1.2/src} -sv {cpu_tb_top.sv}
 
 #vsim -sv_lib uvm_dpi +UVM_VERBOSITY=UVM_HIGH cpu_tb_top
 

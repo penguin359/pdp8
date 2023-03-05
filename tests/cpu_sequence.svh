@@ -26,7 +26,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
 
             trans = new;
             start_item(trans);
-            trans.set_data($urandom_range(0, 4095));
+            trans.set_read_data($urandom_range(0, 4095));
             finish_item(trans);
 
             trans = new;
@@ -39,7 +39,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
 
             trans = new;
             start_item(trans);
-            trans.set_data($urandom_range(0, 4095));
+            trans.set_read_data($urandom_range(0, 4095));
             finish_item(trans);
         end
 
