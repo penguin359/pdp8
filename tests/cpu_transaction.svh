@@ -21,6 +21,8 @@ class cpu_transaction extends uvm_sequence_item;
 
     function new(string name="cpu_transaction");
         super.new();
+        set_zero_page(1);
+        set_indirect(0);
     endfunction
 
     function string convert2string();
@@ -57,12 +59,13 @@ class cpu_transaction extends uvm_sequence_item;
     endfunction
 
     function bit is_zero_page();
-        return read_data[Z_BIT] == 1 ? 1'b1 : 1'b0;
+        // Z_BIT is set if accessing current page
+        return read_data[Z_BIT] == 1 ? 1'b0 : 1'b1;
     endfunction
 
     function void set_zero_page(bit zero_page);
         value_type = TXN_INSTR;
-        read_data[Z_BIT] = zero_page;
+        read_data[Z_BIT] = zero_page ? 1'b0 : 1'b1;
     endfunction
 
     function bit is_indirect();

@@ -2,7 +2,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
     `uvm_object_utils(cpu_sequence);
 
     // Disable indirect-addressing test until bug is fixed
-    localparam EnableIndirect = 0;
+    localparam EnableIndirect = 1;
 
     function new(string name = "cpu_sequence");
         super.new(name);
