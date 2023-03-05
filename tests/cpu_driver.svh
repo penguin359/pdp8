@@ -45,9 +45,11 @@ class cpu_driver extends uvm_driver #(cpu_transaction);
             cpu_transaction trans;
             seq_item_port.get_next_item(trans);
             `uvm_info("CPU_DRIVER", $sformatf("Bus read time=%0t value=0x%03h", $time, trans.read_data), UVM_HIGH);
+            `uvm_info("CPU_DRIVER", $sformatf("Bus TXN: %s", trans.convert2string()), UVM_MEDIUM);
 
             wait(vif.driver_cb.mem_load == 1'b1);
             vif.driver_cb.read_data <= trans.read_data;
+            @(posedge vif.clk) #1
 	    vif.driver_cb.mem_ready <= 1'b1;
             @(posedge vif.clk) #1
 	    vif.driver_cb.mem_ready <= 1'b0;
