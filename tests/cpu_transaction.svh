@@ -43,9 +43,9 @@ class cpu_transaction extends uvm_sequence_item;
                 return $sformatf("OP: addr=0x%03h %s i=%d z=%d offset=0x%02h", addr, opcode,
                     this.is_indirect(), this.is_zero_page(), this.get_offset());
             end
-            TXN_ADDRESS: return $sformatf("ADDRESS: addr=0x%03h value=0x%03h", addr, read_data);
+            TXN_ADDRESS: return $sformatf("INDIRECT: addr=0x%03h value=0x%03h", addr, read_data);
             TXN_READ: return $sformatf("READ: addr=0x%03h value=0x%03h", addr, read_data);
-            TXN_WRITE: return $sformatf("WRITE: addr=0x%03h value=0x%03h", addr, read_data);
+            TXN_WRITE: return $sformatf("WRITE: addr=0x%03h value=0x%03h", addr, write_data);
         endcase
     endfunction
 

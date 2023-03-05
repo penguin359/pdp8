@@ -1,6 +1,8 @@
 class cpu_sequence extends uvm_sequence #(cpu_transaction);
     `uvm_object_utils(cpu_sequence);
 
+    `include "pdp8.vh"
+
     // Disable indirect-addressing test until bug is fixed
     localparam EnableIndirect = 1;
 
@@ -155,6 +157,85 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
                 finish_item(txn);
             end
         end
+
+        // This instruction should load -3 into
+        // the Accumulator
+        txn = new;
+        start_item(txn);
+        txn.set_opcode(txn.OPR);
+        txn.read_data[CLA_BIT] = 1'b1;
+        txn.read_data[IAC_BIT] = 1'b1;
+        finish_item(txn);
+
+        // Run a DCA to verify the value
+        txn = new;
+        start_item(txn);
+        txn.set_opcode(txn.DCA);
+        txn.set_zero_page(1);
+        txn.set_indirect(0);
+        txn.set_offset($urandom_range(0, 127));
+        finish_item(txn);
+
+        // Data write for DCA
+        txn = new;
+        start_item(txn);
+        txn.set_write_data($urandom_range(0, 4095));
+        finish_item(txn);
+
+        // This instruction should load -3 into
+        // the Accumulator
+        txn = new;
+        start_item(txn);
+        txn.set_opcode(txn.OPR);
+        txn.read_data[CLA_BIT] = 1'b1;
+        txn.read_data[CLL_BIT] = 1'b1;
+        txn.read_data[CML_BIT] = 1'b1;
+        txn.read_data[RAL_BIT] = 1'b1;
+        txn.read_data[BSW_BIT] = 1'b1;
+        txn.read_data[IAC_BIT] = 1'b1;
+        finish_item(txn);
+
+        // Run a DCA to verify the value
+        txn = new;
+        start_item(txn);
+        txn.set_opcode(txn.DCA);
+        txn.set_zero_page(1);
+        txn.set_indirect(0);
+        txn.set_offset($urandom_range(0, 127));
+        finish_item(txn);
+
+        // Data write for DCA
+        txn = new;
+        start_item(txn);
+        txn.set_write_data($urandom_range(0, 4095));
+        finish_item(txn);
+
+        // This instruction should load -3 into
+        // the Accumulator
+        txn = new;
+        start_item(txn);
+        txn.set_opcode(txn.OPR);
+        txn.read_data[CLA_BIT] = 1'b1;
+        txn.read_data[CMA_BIT] = 1'b1;
+        txn.read_data[CLL_BIT] = 1'b1;
+        txn.read_data[RAL_BIT] = 1'b1;
+        txn.read_data[BSW_BIT] = 1'b1;
+        finish_item(txn);
+
+        // Run a DCA to verify the value
+        txn = new;
+        start_item(txn);
+        txn.set_opcode(txn.DCA);
+        txn.set_zero_page(1);
+        txn.set_indirect(0);
+        txn.set_offset($urandom_range(0, 127));
+        finish_item(txn);
+
+        // Data write for DCA
+        txn = new;
+        start_item(txn);
+        txn.set_write_data($urandom_range(0, 4095));
+        finish_item(txn);
 
         // Generate a series of no-ops at the end to ensure that
         // all the results from the previous instructions including

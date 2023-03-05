@@ -47,3 +47,4 @@ Test ISZ wrap.
 
 Test unconditional skips
 SMA SZA SNL SKP SPA SNA SZL CLA OSR HLT
+Test that CLA doesn't change conditional skip
