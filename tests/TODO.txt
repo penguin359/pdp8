@@ -17,3 +17,33 @@ sequence for file i/o for uart
 move around tlm1/2 ports?
 Make CPU pure Verilog-2001
   Drop enums into constants
+
+
+Test that AND does not affect LINK bit, but does affect all AC bits.
+Test TAD with both a low and high LINK bit and carry/no-carry will/will-not
+complement LINK.
+
+ISZ does not touch LINK/AC. It skips on result of increment being zero.
+
+AND - Affects AC register. Reads Memory.
+TAD - Affects AC and LINK registers. Reads Memory.
+ISZ - Affects PC. Reads and Writes Memory.
+DCA - Affects AC. Writes Memory.
+JMS - Affects PC. Writes Memory.
+JMP - Affects PC.
+
+Indirect addressing of locations 0010 - 0017 (0x008 - 0x00f), indirect address
+is incremented in memory for auto-index mode. Post-increment value is used in
+the indirect look-up.
+
+Test CIA or CMA+IAC for 2's complement negation.
+
+zero bit means current page if set and zero page if un-set.
+
+Test instruction page crossing.
+Test instruction field crossing/wrap. (7777 -> 0000)
+Test auto-index wrap.
+Test ISZ wrap.
+
+Test unconditional skips
+SMA SZA SNL SKP SPA SNA SZL CLA OSR HLT
