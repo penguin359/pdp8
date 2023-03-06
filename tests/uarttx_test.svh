@@ -20,7 +20,11 @@ class uarttx_test extends uvm_test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        uarttx_sequence seq = uarttx_sequence::type_id::create("uarttx_sequence", this);
+`ifdef USE_FILE_SOURCE
+        uart_sequence seq = uart_file_sequence::type_id::create("uart_file_sequence", this);
+`else
+        uart_sequence seq = uart_sequence::type_id::create("uart_sequence", this);
+`endif
         phase.raise_objection(this, "Starting the main TX sequence");
         seq.start(env.bus_agent.seq);
         phase.drop_objection(this);

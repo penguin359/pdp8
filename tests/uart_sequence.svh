@@ -1,7 +1,7 @@
-class uarttx_sequence extends uvm_sequence #(uart_transaction);
-    `uvm_object_utils(uarttx_sequence);
+class uart_sequence extends uvm_sequence #(uart_transaction);
+    `uvm_object_utils(uart_sequence);
 
-    function new(string name = "uarttx_sequence");
+    function new(string name = "uart_sequence");
         super.new(name);
     endfunction
 
@@ -16,4 +16,4 @@ class uarttx_sequence extends uvm_sequence #(uart_transaction);
             finish_item(trans);
         end
     endtask: body
-endclass: uarttx_sequence
+endclass: uart_sequence

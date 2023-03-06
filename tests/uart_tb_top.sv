@@ -3,12 +3,13 @@
 `include "uvm_macros.svh"
 
 `include "uart_if.svh"
-package testbench_pkg;
+package uart_testbench;
     import uvm_pkg::*;
 
     `include "uart_config.svh"
     `include "uart_transaction.svh"
-    `include "uarttx_sequence.svh"
+    `include "uart_sequence.svh"
+    `include "uart_file_sequence.svh"
     `include "uartrx_bus_driver.svh"
     `include "uartrx_bus_monitor.svh"
     `include "uartrx_bus_agent.svh"
@@ -24,11 +25,11 @@ package testbench_pkg;
     `include "uartrx_test.svh"
     `include "uarttx_env.svh"
     `include "uarttx_test.svh"
-endpackage: testbench_pkg
+endpackage: uart_testbench
 
-module top;
+module uart_tb_top;
     import uvm_pkg::*;
-    import testbench_pkg::*;
+    import uart_testbench::*;
 
     bit clk, nrst;
 
@@ -84,4 +85,4 @@ module top;
         run_test("uartrx_test");
 `endif
     end
-endmodule: top
+endmodule: uart_tb_top
