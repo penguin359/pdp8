@@ -10,14 +10,14 @@ interface cpu_if(input logic clk, nrst);
     logic linkout;
     logic halt;
 
-    logic bit1_cp2;
-    logic bit2_cp3;
-    logic [2:0] io_address;
-    logic [7:0] dataout;
+    //logic bit1_cp2;
+    //logic bit2_cp3;
+    //logic [2:0] io_address;
+    //logic [7:0] dataout;
 
-    logic skip_flag;
-    logic clearacc;
-    logic [7:0] datain;
+    //logic skip_flag;
+    //logic clearacc;
+    //logic [7:0] datain;
 
     logic [11:0] address;
     logic [11:0] write_data;
@@ -44,9 +44,9 @@ interface cpu_if(input logic clk, nrst);
         //input io_address;
         //input dataout;
 
-        output skip_flag;
-        output clearacc;
-        output datain;
+        //output skip_flag;
+        //output clearacc;
+        //output datain;
 
         input address;
         input write_data;

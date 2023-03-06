@@ -32,9 +32,9 @@ class cpu_driver extends uvm_driver #(cpu_transaction);
 	vif.driver_cb.step <= 1'b0;
 	vif.driver_cb.deposit <= 1'b0;
 
-	vif.driver_cb.skip_flag <= 1'b0;
-	vif.driver_cb.clearacc <= 1'b0;
-	vif.driver_cb.datain <= 12'b0;
+	//vif.driver_cb.skip_flag <= 1'b0;
+	//vif.driver_cb.clearacc <= 1'b0;
+	//vif.driver_cb.datain <= 12'b0;
 
 	vif.driver_cb.read_data <= 12'b0;
 	vif.driver_cb.mem_ready <= 1'b0;

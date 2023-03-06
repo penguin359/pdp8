@@ -1,5 +1,6 @@
 vlog -work work -sv {+incdir+..} {../state.v}
 vlog -work work -sv {+incdir+..} {../cpu.v}
+vlog -work work {+incdir+..} {../IOT_Distributor.v}
 
 vlog -L uvm {+incdir+..} {+incdir+../../uvm-1.2/src} -sv {cpu_tb_top.sv}
 

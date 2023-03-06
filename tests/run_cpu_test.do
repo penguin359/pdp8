@@ -17,6 +17,7 @@ vmap work rtl_work
 #vlog -work work -sv {../control.v}
 vlog -work work -sv {+incdir+..} {../state.v}
 vlog -work work -sv {+incdir+..} {../cpu.v}
+vlog -work work {+incdir+..} {../IOT_Distributor.v}
 
 vlog -work uvm +define+UVM_HDL_NO_DPI +incdir+../../uvm-1.2/src -dpiheader dpi_export.h {../../uvm-1.2/src/uvm_pkg.sv}
 
