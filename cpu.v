@@ -57,7 +57,9 @@ module cpu(
     input mem_ready
 );
 
+`define USE_WIRE
 `include "control.vh"
+`undef USE_WIRE
 
 //type word is std_logic_vector(11 downto 0);
 //wire ac : word = 0;
@@ -83,8 +85,11 @@ localparam i_bit = 8;
 localparam uc_group1_bit = 8;
 localparam uc_group2_bit = 0;
 
-typedef enum {group1, group2, group3} uc_group_t;
-uc_group_t uc_group;
+localparam group1 = 2'd0;
+localparam group2 = 2'd1;
+localparam group3 = 2'd2;
+`define uc_group_t wire [1:0]
+`uc_group_t uc_group;
 
 // uC Group 1 bits
 localparam cla_bit = 7;
@@ -139,15 +144,15 @@ wire uc2_skip;
 reg [12:0] uc_link_ac;
 reg uc_skip;
 
-sel_ac_t sel_ac;
-sel_pc_t sel_pc;
-sel_skip_t sel_skip;
-sel_addr_t sel_addr;
-sel_data_t sel_data;
-sel_iot_t sel_iot;
-sel_ir_t sel_ir;
-sel_ma_t sel_ma;
-sel_md_t sel_md;
+`sel_ac_t sel_ac;
+`sel_pc_t sel_pc;
+`sel_skip_t sel_skip;
+`sel_addr_t sel_addr;
+`sel_data_t sel_data;
+`sel_iot_t sel_iot;
+`sel_ir_t sel_ir;
+`sel_ma_t sel_ma;
+`sel_md_t sel_md;
 
 wire md_clear;
 wire iot_skip2;

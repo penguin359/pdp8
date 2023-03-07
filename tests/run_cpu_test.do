@@ -14,14 +14,15 @@ vmap work rtl_work
 #vcom -93 -work work {../control.vhd}
 #vcom -93 -work work {../state.vhd}
 #vcom -93 -work work {../cpu.vhd}
-#vlog -work work -sv {../control.v}
-vlog -work work -sv {+incdir+..} {../state.v}
-vlog -work work -sv {+incdir+..} {../cpu.v}
-vlog -work work {+incdir+..} {../IOT_Distributor.v}
+#vcom -93 -work work {../IOT_Distributor.vhd}
+#vlog -vlog01compat -work work {../control.v}
+vlog -vlog01compat -work work {+incdir+..} {../state.v}
+vlog -vlog01compat -work work {+incdir+..} {../cpu.v}
+vlog -vlog01compat -work work {+incdir+..} {../IOT_Distributor.v}
 
-vlog -work uvm +define+UVM_HDL_NO_DPI +incdir+../../uvm-1.2/src -dpiheader dpi_export.h {../../uvm-1.2/src/uvm_pkg.sv}
+vlog -sv -work uvm {+define+UVM_HDL_NO_DPI} {+incdir+../../uvm-1.2/src} -dpiheader dpi_export.h {../../uvm-1.2/src/uvm_pkg.sv}
 
-vlog -L uvm {+incdir+..} {+incdir+../../uvm-1.2/src} -sv {cpu_tb_top.sv}
+vlog -sv -L uvm {+incdir+..} {+incdir+../../uvm-1.2/src} {cpu_tb_top.sv}
 
 vsim -classdebug -sv_lib uvm_dpi +UVM_VERBOSITY=UVM_HIGH cpu_tb_top
 

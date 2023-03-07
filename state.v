@@ -22,15 +22,15 @@ module state(
     input run;
     input [2:0] opcode;
     input indirect;
-    output sel_ac_t sel_ac;
-    output sel_pc_t sel_pc;
-    output sel_skip_t sel_skip;
-    output sel_addr_t sel_addr;
-    output sel_data_t sel_data;
-    output sel_iot_t sel_iot;
-    output sel_ir_t sel_ir;
-    output sel_ma_t sel_ma;
-    output sel_md_t sel_md;
+    output `sel_ac_t sel_ac;
+    output `sel_pc_t sel_pc;
+    output `sel_skip_t sel_skip;
+    output `sel_addr_t sel_addr;
+    output `sel_data_t sel_data;
+    output `sel_iot_t sel_iot;
+    output `sel_ir_t sel_ir;
+    output `sel_ma_t sel_ma;
+    output `sel_md_t sel_md;
     output reg mem_read;
     output reg mem_write;
     input mem_valid;
@@ -39,9 +39,16 @@ module state(
     // 13 inputs + IR
     // 33 outputs
     // 22 states
-    typedef enum {Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2} cpu_state_t; 
-    cpu_state_t current_state = Shalt;
-    cpu_state_t next_state;
+    //typedef enum {Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2} cpu_state_t;
+    localparam Shalt = 3'd0;
+    localparam Sread_instr = 3'd1;
+    localparam Sdecode_instr = 3'd2;
+    localparam Sread_indirect = 3'd3;
+    localparam Sexec_instr = 3'd4;
+    localparam Sexec_instr2 = 3'd5;
+    `define cpu_state_t reg [3:0]
+    `cpu_state_t current_state = Shalt;
+    `cpu_state_t next_state;
     //typedef wire [11:0] word;
     //word ac = 12'b0;
     //word ir = 12'b0;

@@ -1,6 +1,6 @@
-vlog -work work -sv {+incdir+..} {../state.v}
-vlog -work work -sv {+incdir+..} {../cpu.v}
-vlog -work work {+incdir+..} {../IOT_Distributor.v}
+vlog -work work -sv {+incdir+..} -vlog01compat {../state.v}
+vlog -work work -sv {+incdir+..} -vlog01compat {../cpu.v}
+vlog -work work {+incdir+..} -vlog01compat {../IOT_Distributor.v}
 
 vlog -L uvm {+incdir+..} {+incdir+../../uvm-1.2/src} -sv {cpu_tb_top.sv}
 
