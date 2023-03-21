@@ -78,43 +78,43 @@ reg [11:0] ea;
 reg [11:0] pc = 0;
 reg skip;
 
-localparam integer z_bit = 7;
-localparam integer i_bit = 8;
+localparam integer ZBit = 7;
+localparam integer IBit = 8;
 
 // OPR (111) uC bits
-localparam integer uc_group1_bit = 8;
-localparam integer uc_group2_bit = 0;
+localparam integer UcGroup1Bit = 8;
+localparam integer UcGroup2Bit = 0;
 
-localparam integer group1 = 2'd0;
-localparam integer group2 = 2'd1;
-localparam integer group3 = 2'd2;
+localparam integer Group1 = 2'd0;
+localparam integer Group2 = 2'd1;
+localparam integer Group3 = 2'd2;
 `define UC_GROUP_T wire [1:0]
 `UC_GROUP_T uc_group;
 
 // uC Group 1 bits
-localparam integer cla_bit = 7;
-localparam integer cll_bit = 6;
-localparam integer cma_bit = 5;
-localparam integer cml_bit = 4;
-localparam integer rar_bit = 3;
-localparam integer ral_bit = 2;
-localparam integer bsw_bit = 1;
-localparam integer iac_bit = 0;
+localparam integer ClaBit = 7;
+localparam integer CllBit = 6;
+localparam integer CmaBit = 5;
+localparam integer CmlBit = 4;
+localparam integer RarBit = 3;
+localparam integer RalBit = 2;
+localparam integer BswBit = 1;
+localparam integer IacBit = 0;
 
 // uC Group 2 bits
-//localparam integer cla_bit = 7;
-localparam integer sma_bit = 6;
-localparam integer sza_bit = 5;
-localparam integer snl_bit = 4;
-localparam integer and_bit = 3;
-localparam integer osr_bit = 2;
-localparam integer hlt_bit = 1;
+//localparam integer ClaBit = 7;
+localparam integer SmaBit = 6;
+localparam integer SzaBit = 5;
+localparam integer SnlBit = 4;
+localparam integer AndBit = 3;
+localparam integer OsrBit = 2;
+localparam integer HltBit = 1;
 
 // uC Group 3 bits
-//localparam integer cla_bit = 7;
-localparam integer mqa_bit = 6;
-localparam integer sca_bit = 5;
-localparam integer mql_bit = 4;
+//localparam integer ClaBit = 7;
+localparam integer MqaBit = 6;
+localparam integer ScaBit = 5;
+localparam integer MqlBit = 4;
 // 3:1 Code bits
 
 // uC decoded signals
@@ -165,7 +165,7 @@ wire mem_read, mem_write;
         .clk(clk),
         .run(1'b1),
         .opcode(ir[11:9]),
-        .indirect(ir[i_bit]),
+        .indirect(ir[IBit]),
         .sel_ac(sel_ac),
         .sel_pc(sel_pc),
         .sel_skip(sel_skip),
@@ -201,7 +201,7 @@ wire mem_read, mem_write;
     //variable page : std_logic_vector(11 downto 7);
     //begin
     //  if rising_edge(clk) then
-    //      if ir(z_bit) == 1'b1 then
+    //      if ir(ZBit) == 1'b1 then
     //          page := pc(11 downto 7);
     //      else
     //          page := (others => 1'b0);
@@ -209,12 +209,12 @@ wire mem_read, mem_write;
     //      ea <= page & ir(6 downto 0);
     //  end if;
     //end process;
-    //always @(pc[11:7], ir[z_bit], ir[6:0])
+    //always @(pc[11:7], ir[ZBit], ir[6:0])
     // TODO Is this the best way to emulate a VHDL variable?
     reg [11:7] page;
     always @*
     begin
-        if(ir[z_bit] == 1'b1)
+        if(ir[ZBit] == 1'b1)
             page = pc[11:7];
         else
             page = 5'b0;
@@ -292,28 +292,28 @@ wire mem_read, mem_write;
     endcase
 
     // Decoding OPR instructions
-    assign uc_group = (ir[uc_group1_bit] == 1'b0) ? group1 :
-                      (ir[uc_group2_bit] == 1'b0) ? group2 :
-                      group3;
+    assign uc_group = (ir[UcGroup1Bit] == 1'b0) ? Group1 :
+                      (ir[UcGroup2Bit] == 1'b0) ? Group2 :
+                      Group3;
 
-    assign en_cla = ir[cla_bit];
-    assign en_cll = ir[cll_bit];
-    assign en_cma = ir[cma_bit];
-    assign en_cml = ir[cml_bit];
-    assign en_iac = ir[iac_bit];
-    assign en_sma = ir[sma_bit];
-    assign en_sza = ir[sza_bit];
-    assign en_snl = ir[snl_bit];
-    assign en_and = ir[and_bit];
+    assign en_cla = ir[ClaBit];
+    assign en_cll = ir[CllBit];
+    assign en_cma = ir[CmaBit];
+    assign en_cml = ir[CmlBit];
+    assign en_iac = ir[IacBit];
+    assign en_sma = ir[SmaBit];
+    assign en_sza = ir[SzaBit];
+    assign en_snl = ir[SnlBit];
+    assign en_and = ir[AndBit];
 
-    always @(ir[rar_bit:bsw_bit])
+    always @(ir[RarBit:BswBit])
     begin
         en_rar <= 1'b0;
         en_rtr <= 1'b0;
         en_ral <= 1'b0;
         en_rtl <= 1'b0;
         en_bsw <= 1'b0;
-        case(ir[rar_bit:bsw_bit])
+        case(ir[RarBit:BswBit])
             3'b100: en_rar <= 1'b1;
             3'b101: en_rtr <= 1'b1;
             3'b010: en_ral <= 1'b1;
@@ -348,15 +348,15 @@ wire mem_read, mem_write;
     always @(uc_group, uc1_stage4, uc2_stage1, uc2_skip, link_ac)
     begin
         case(uc_group)
-            group1: begin
+            Group1: begin
                 uc_link_ac <= uc1_stage4;
                 uc_skip <= 1'b0;
             end
-            group2: begin
+            Group2: begin
                 uc_link_ac <= uc2_stage1;
                 uc_skip <= uc2_skip;
             end
-            group3: begin
+            Group3: begin
                 uc_link_ac <= link_ac;
                 uc_skip <= 1'b0;
             end

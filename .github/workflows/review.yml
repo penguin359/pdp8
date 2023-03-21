@@ -7,6 +7,7 @@ jobs:
     - uses: actions/checkout@master
     - uses: chipsalliance/verible-linter-action@main
       with:
+        config_file: 'verible.rules'
         paths: |
           .
           ./tests

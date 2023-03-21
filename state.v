@@ -40,14 +40,14 @@ module state(
     // 33 outputs
     // 22 states
     //typedef enum {
-    //    Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2
+    //    Shalt, SreadInstr, SdecodeInstr, SreadIndirect, SexecInstr, SexecInstr2
     //} CPU_STATE_T;
     localparam integer Shalt = 3'd0;
-    localparam integer Sread_instr = 3'd1;
-    localparam integer Sdecode_instr = 3'd2;
-    localparam integer Sread_indirect = 3'd3;
-    localparam integer Sexec_instr = 3'd4;
-    localparam integer Sexec_instr2 = 3'd5;
+    localparam integer SreadInstr = 3'd1;
+    localparam integer SdecodeInstr = 3'd2;
+    localparam integer SreadIndirect = 3'd3;
+    localparam integer SexecInstr = 3'd4;
+    localparam integer SexecInstr2 = 3'd5;
     `define CPU_STATE_T reg [3:0]
     `CPU_STATE_T current_state = Shalt;
     `CPU_STATE_T next_state;
@@ -93,98 +93,98 @@ module state(
             Shalt: begin
                 halted <= 1'b1;
                 if(run)
-                    next_state <= Sread_instr;
+                    next_state <= SreadInstr;
             end
-            Sread_instr: begin
+            SreadInstr: begin
                 // Read memory at address PC and load into IR
                 sel_addr <= addr_pc;
                 sel_ir <= ir_data;
                 mem_read <= 1'b1;
                 if(mem_valid)
-                    next_state <= Sdecode_instr;
+                    next_state <= SdecodeInstr;
             end
-            Sdecode_instr: begin
+            SdecodeInstr: begin
                 if(opcode == OpcodeOpr)
-                    next_state <= Sexec_instr;
+                    next_state <= SexecInstr;
                 else if(opcode == OpcodeIot)
-                    next_state <= Sexec_instr;
+                    next_state <= SexecInstr;
                 else if(indirect)
                     // Let mem_read drop to 1'b0
-                    next_state <= Sread_indirect;
+                    next_state <= SreadIndirect;
                 else begin
                     sel_ma <= ma_ea;
-                    next_state <= Sexec_instr;
+                    next_state <= SexecInstr;
                 end
             end
-            Sread_indirect: begin
+            SreadIndirect: begin
                 sel_addr <= addr_ea;
                 sel_ma <= ma_data;
                 mem_read <= 1'b1;
                 if(mem_valid)
-                    next_state <= Sexec_instr;
+                    next_state <= SexecInstr;
             end
-            Sexec_instr: begin
+            SexecInstr: begin
                 case(opcode)
                     OpcodeAnd: begin
                         sel_addr <= addr_ma;
                         sel_md <= md_data;
                         mem_read <= 1'b1;
                         if(mem_valid)
-                                next_state <= Sexec_instr2;
+                                next_state <= SexecInstr2;
                     end
                     OpcodeTad: begin
                         sel_addr <= addr_ma;
                         sel_md <= md_data;
                         mem_read <= 1'b1;
                         if(mem_valid)
-                                next_state <= Sexec_instr2;
+                                next_state <= SexecInstr2;
                     end
                     OpcodeIsz: begin
                         sel_addr <= addr_ma;
                         sel_md <= md_data1;
                         mem_read <= 1'b1;
                         if(mem_valid)
-                                next_state <= Sexec_instr2;
+                                next_state <= SexecInstr2;
                     end
                     OpcodeDca: begin
                         sel_addr <= addr_ma;
                         sel_data <= data_ac;
                         mem_write <= 1'b1;
                         if(mem_valid)
-                                next_state <= Sexec_instr2;
+                                next_state <= SexecInstr2;
                     end
                     OpcodeJms: begin
                         sel_addr <= addr_ma;
                         sel_data <= data_pc1;
                         mem_write <= 1'b1;
                         if(mem_valid)
-                                next_state <= Sexec_instr2;
+                                next_state <= SexecInstr2;
                     end
                     OpcodeJmp: begin
                         sel_pc <= pc_ma;
-                        next_state <= Sread_instr;
+                        next_state <= SreadInstr;
                     end
                     OpcodeIot: begin
                         sel_ac <= ac_iot;
                         sel_pc <= pc_incr;
                         sel_skip <= skip_iot;
                         sel_iot <= iot_en;
-                        next_state <= Sread_instr;
+                        next_state <= SreadInstr;
                     end
                     OpcodeOpr: begin
                         sel_ac <= ac_uc;
                         sel_pc <= pc_incr;
                         sel_skip <= skip_uc;
-                        next_state <= Sread_instr;
+                        next_state <= SreadInstr;
                     end
                     default: begin
                         next_state <= Shalt;
                     end
                 endcase
             end
-            Sexec_instr2: begin
+            SexecInstr2: begin
                 sel_pc <= pc_incr;
-                next_state <= Sread_instr;
+                next_state <= SreadInstr;
                 case(opcode)
                     OpcodeAnd:
                         sel_ac <= ac_and_md;
@@ -199,7 +199,7 @@ module state(
                         if(mem_valid) begin
                             sel_pc <= pc_incr;
                             sel_skip <= skip_md_clear;
-                            next_state <= Sread_instr;
+                            next_state <= SreadInstr;
                         end
                     end
                     OpcodeDca:

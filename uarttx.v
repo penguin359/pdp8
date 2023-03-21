@@ -16,10 +16,10 @@ module uarttx(
 
     assign value = counter[31:25];
 
-    parameter integer baud = 10_000_000;
-    parameter integer clock_rate = 50_000_000;
-    //localparam time bit_time = 1s;
-    localparam integer tx_divider = clock_rate / baud;
+    parameter integer Baud = 10_000_000;
+    parameter integer ClockRate = 50_000_000;
+    //localparam time BitTime = 1s;
+    localparam integer TxDivider = clock_rate / baud;
 
     reg [$clog2(tx_divider)-1:0] tx_counter;
     reg [11:0] shift_reg;
