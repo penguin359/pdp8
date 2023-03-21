@@ -13,7 +13,7 @@ class iot_sequence extends uvm_sequence #(iot_transaction);
             start_item(txn);
             txn.ready = $urandom_range(0, 1);
             txn.clearacc = $urandom_range(0, 1);
-            txn.data_in = $urandom_range(8'h21, 8'h7e);  // ASCII graphic characters
+            txn.data_in = $urandom_range('h21, 'h7e);  // ASCII graphic characters
             finish_item(txn);
         end
     endtask: body
