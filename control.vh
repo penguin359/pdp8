@@ -1,3 +1,16 @@
+`ifdef TYPE
+`undef TYPE
+`undef sel_ac_t
+`undef sel_pc_t
+`undef sel_skip_t
+`undef sel_addr_t
+`undef sel_data_t
+`undef sel_iot_t
+`undef sel_ir_t
+`undef sel_ma_t
+`undef sel_md_t
+`endif
+
 `ifdef USE_WIRE
 `define TYPE wire
 `else

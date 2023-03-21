@@ -2,6 +2,7 @@
 
 `include "uvm_macros.svh"
 
+//`default net_type none
 `include "cpu_if.svh"
 `include "iot_if.svh"
 `include "cpu_testbench_pkg.svh"
