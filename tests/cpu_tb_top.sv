@@ -4,27 +4,7 @@
 
 `include "cpu_if.svh"
 `include "iot_if.svh"
-package cpu_testbench;
-    import uvm_pkg::*;
-
-    //`include "cpu_config.svh"
-    `include "cpu_transaction.svh"
-    `include "cpu_sequence.svh"
-    //`include "cpu_sequencer.svh"
-    `include "cpu_driver.svh"
-    `include "cpu_monitor.svh"
-    `include "cpu_agent.svh"
-    `include "iot_config.svh"
-    `include "iot_transaction.svh"
-    `include "iot_sequence.svh"
-    `include "iot_driver.svh"
-    `include "iot_monitor.svh"
-    `include "iot_agent.svh"
-    `include "cpu_reference.svh"
-    `include "cpu_scoreboard.svh"
-    `include "cpu_env.svh"
-    `include "cpu_test.svh"
-endpackage: cpu_testbench
+`include "cpu_testbench_pkg.svh"
 
 module cpu_tb_top;
     import uvm_pkg::*;
@@ -32,10 +12,10 @@ module cpu_tb_top;
 
     bit clk, nrst;
 
-    localparam time period = 20ns;
-    localparam longint clock_rate = 1s / period;
+    localparam time Period = 20ns;
+    localparam longint ClockRate = 1s / Period;
 
-    always #(period/2) clk = ~clk;
+    always #(Period/2) clk = ~clk;
 
     initial begin
         nrst = 0;
@@ -50,11 +30,11 @@ module cpu_tb_top;
     logic clearacc;
     logic [7:0] datain;
 
-    cpu_if vif(clk, nrst);
-    iot_if io3(clk, nrst);
-    iot_if io4(clk, nrst);
+    cpu_if vif(.clk(clk), .nrst(nrst));
+    iot_if io3(.clk(clk), .nrst(nrst));
+    iot_if io4(.clk(clk), .nrst(nrst));
 
-    cpu //#(.clock_rate(clock_rate), .baud(baud))
+    cpu //#(.clock_rate(ClockRate), .baud(baud))
     dut (
         .clk(vif.clk),
         .nrst(vif.nrst),
@@ -139,8 +119,10 @@ module cpu_tb_top;
         io4_config.active = UVM_ACTIVE;
 
         uvm_config_db #(virtual cpu_if)::set(uvm_root::get(), "", "cpu_if", vif);
-        uvm_config_db #(iot_config)::set(uvm_root::get(), "uvm_test_top.env.io3_agent", "iot_config", io3_config);
-        uvm_config_db #(iot_config)::set(uvm_root::get(), "uvm_test_top.env.io4_agent", "iot_config", io4_config);
+        uvm_config_db #(iot_config)::set(uvm_root::get(),
+            "uvm_test_top.env.io3_agent", "iot_config", io3_config);
+        uvm_config_db #(iot_config)::set(uvm_root::get(),
+            "uvm_test_top.env.io4_agent", "iot_config", io4_config);
 
         $dumpfile("cpu.vcd");
         $dumpvars;

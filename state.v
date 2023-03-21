@@ -39,7 +39,9 @@ module state(
     // 13 inputs + IR
     // 33 outputs
     // 22 states
-    //typedef enum {Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2} cpu_state_t;
+    //typedef enum {
+    //    Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2
+    //} cpu_state_t;
     localparam Shalt = 3'd0;
     localparam Sread_instr = 3'd1;
     localparam Sdecode_instr = 3'd2;
@@ -58,14 +60,14 @@ module state(
     wire [11:0] ea = 12'b0;
     wire [11:0] pc = 12'b0;
 
-    localparam [2:0] opcode_and = 3'b000;
-    localparam [2:0] opcode_tad = 3'b001;
-    localparam [2:0] opcode_isz = 3'b010;
-    localparam [2:0] opcode_dca = 3'b011;
-    localparam [2:0] opcode_jms = 3'b100;
-    localparam [2:0] opcode_jmp = 3'b101;
-    localparam [2:0] opcode_iot = 3'b110;
-    localparam [2:0] opcode_opr = 3'b111;
+    localparam integer opcode_and = 3'b000;
+    localparam integer opcode_tad = 3'b001;
+    localparam integer opcode_isz = 3'b010;
+    localparam integer opcode_dca = 3'b011;
+    localparam integer opcode_jms = 3'b100;
+    localparam integer opcode_jmp = 3'b101;
+    localparam integer opcode_iot = 3'b110;
+    localparam integer opcode_opr = 3'b111;
 
     always @(posedge clk)
     begin

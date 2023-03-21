@@ -1,0 +1,21 @@
+package cpu_testbench;
+    import uvm_pkg::*;
+
+    //`include "cpu_config.svh"
+    `include "cpu_transaction.svh"
+    `include "cpu_sequence.svh"
+    //`include "cpu_sequencer.svh"
+    `include "cpu_driver.svh"
+    `include "cpu_monitor.svh"
+    `include "cpu_agent.svh"
+    `include "iot_config.svh"
+    `include "iot_transaction.svh"
+    `include "iot_sequence.svh"
+    `include "iot_driver.svh"
+    `include "iot_monitor.svh"
+    `include "iot_agent.svh"
+    `include "cpu_reference.svh"
+    `include "cpu_scoreboard.svh"
+    `include "cpu_env.svh"
+    `include "cpu_test.svh"
+endpackage: cpu_testbench
