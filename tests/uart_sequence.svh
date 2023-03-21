@@ -1,5 +1,5 @@
 class uart_sequence extends uvm_sequence #(uart_transaction);
-    `uvm_object_utils(uart_sequence);
+    `uvm_object_utils(uart_sequence)
 
     function new(string name = "uart_sequence");
         super.new(name);

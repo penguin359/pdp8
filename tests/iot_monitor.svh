@@ -1,5 +1,5 @@
 class iot_monitor extends uvm_monitor;
-    `uvm_component_utils(iot_monitor);
+    `uvm_component_utils(iot_monitor)
 
     virtual iot_if.MONITOR vif;
 

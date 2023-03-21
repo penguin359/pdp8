@@ -1,5 +1,5 @@
 class uartrx_env extends uvm_env;
-    `uvm_component_utils(uartrx_env);
+    `uvm_component_utils(uartrx_env)
 
     uartrx_bus_agent bus_agent;
     uart_agent external_agent;

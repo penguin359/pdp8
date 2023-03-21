@@ -1,5 +1,5 @@
 class uartrx_test extends uvm_test;
-    `uvm_component_utils(uartrx_test);
+    `uvm_component_utils(uartrx_test)
 
     uartrx_env env;
 

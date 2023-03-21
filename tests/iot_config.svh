@@ -1,5 +1,5 @@
 class iot_config extends uvm_object;
-    `uvm_object_utils(iot_config);
+    `uvm_object_utils(iot_config)
 
     int io_address;
     virtual iot_if iot_if;

@@ -1,5 +1,5 @@
 class uart_file_sequence extends uart_sequence;
-    `uvm_object_utils(uart_file_sequence);
+    `uvm_object_utils(uart_file_sequence)
 
     string filename = "hello-serial.txt";
 

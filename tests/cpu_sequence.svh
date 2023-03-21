@@ -1,5 +1,5 @@
 class cpu_sequence extends uvm_sequence #(cpu_transaction);
-    `uvm_object_utils(cpu_sequence);
+    `uvm_object_utils(cpu_sequence)
 
     `include "pdp8.vh"
 
@@ -21,7 +21,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
             // address.
             txn = new;
             start_item(txn);
-            txn.set_opcode(txn.JMP);
+            txn.set_opcode(cpu_transaction::JMP);
             txn.set_zero_page($urandom_range(0, 1));
             txn.set_indirect($urandom_range(0, EnableIndirect));
             txn.set_offset($urandom_range(0, 127));
@@ -37,7 +37,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
 
             txn = new;
             start_item(txn);
-            txn.set_opcode(txn.JMS);
+            txn.set_opcode(cpu_transaction::JMS);
             txn.set_zero_page($urandom_range(0, 1));
             txn.set_indirect($urandom_range(0, EnableIndirect));
             txn.set_offset($urandom_range(0, 127));
@@ -60,7 +60,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
             repeat(3) begin
                 txn = new;
                 start_item(txn);
-                txn.set_opcode(txn.TAD);
+                txn.set_opcode(cpu_transaction::TAD);
                 txn.set_zero_page($urandom_range(0, 1));
                 txn.set_indirect($urandom_range(0, EnableIndirect));
                 txn.set_offset($urandom_range(0, 127));
@@ -84,7 +84,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
             // being modified.
             txn = new;
             start_item(txn);
-            txn.set_opcode(txn.ISZ);
+            txn.set_opcode(cpu_transaction::ISZ);
             txn.set_zero_page($urandom_range(0, 1));
             txn.set_indirect($urandom_range(0, EnableIndirect));
             txn.set_offset($urandom_range(0, 127));
@@ -111,7 +111,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
 
             txn = new;
             start_item(txn);
-            txn.set_opcode(txn.AND);
+            txn.set_opcode(cpu_transaction::AND);
             txn.set_zero_page($urandom_range(0, 1));
             txn.set_indirect($urandom_range(0, EnableIndirect));
             txn.set_offset($urandom_range(0, 127));
@@ -137,7 +137,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
             repeat(2) begin
                 txn = new;
                 start_item(txn);
-                txn.set_opcode(txn.DCA);
+                txn.set_opcode(cpu_transaction::DCA);
                 txn.set_zero_page($urandom_range(0, 1));
                 txn.set_indirect($urandom_range(0, EnableIndirect));
                 txn.set_offset($urandom_range(0, 127));
@@ -162,7 +162,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
         // the Accumulator
         txn = new;
         start_item(txn);
-        txn.set_opcode(txn.OPR);
+        txn.set_opcode(cpu_transaction::OPR);
         txn.read_data[CLA_BIT] = 1'b1;
         txn.read_data[IAC_BIT] = 1'b1;
         finish_item(txn);
@@ -170,7 +170,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
         // Run a DCA to verify the value
         txn = new;
         start_item(txn);
-        txn.set_opcode(txn.DCA);
+        txn.set_opcode(cpu_transaction::DCA);
         txn.set_zero_page(1);
         txn.set_indirect(0);
         txn.set_offset($urandom_range(0, 127));
@@ -186,7 +186,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
         // the Accumulator
         txn = new;
         start_item(txn);
-        txn.set_opcode(txn.OPR);
+        txn.set_opcode(cpu_transaction::OPR);
         txn.read_data[CLA_BIT] = 1'b1;
         txn.read_data[CLL_BIT] = 1'b1;
         txn.read_data[CML_BIT] = 1'b1;
@@ -198,7 +198,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
         // Run a DCA to verify the value
         txn = new;
         start_item(txn);
-        txn.set_opcode(txn.DCA);
+        txn.set_opcode(cpu_transaction::DCA);
         txn.set_zero_page(1);
         txn.set_indirect(0);
         txn.set_offset($urandom_range(0, 127));
@@ -214,7 +214,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
         // the Accumulator
         txn = new;
         start_item(txn);
-        txn.set_opcode(txn.OPR);
+        txn.set_opcode(cpu_transaction::OPR);
         txn.read_data[CLA_BIT] = 1'b1;
         txn.read_data[CMA_BIT] = 1'b1;
         txn.read_data[CLL_BIT] = 1'b1;
@@ -225,7 +225,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
         // Run a DCA to verify the value
         txn = new;
         start_item(txn);
-        txn.set_opcode(txn.DCA);
+        txn.set_opcode(cpu_transaction::DCA);
         txn.set_zero_page(1);
         txn.set_indirect(0);
         txn.set_offset($urandom_range(0, 127));
@@ -244,7 +244,7 @@ class cpu_sequence extends uvm_sequence #(cpu_transaction);
         repeat(5) begin
             txn = new;
             start_item(txn);
-            txn.set_opcode(txn.OPR);
+            txn.set_opcode(cpu_transaction::OPR);
             finish_item(txn);
         end
     endtask: body

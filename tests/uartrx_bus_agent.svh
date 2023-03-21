@@ -1,5 +1,5 @@
 class uartrx_bus_agent extends uvm_agent;
-    `uvm_component_utils(uartrx_bus_agent);
+    `uvm_component_utils(uartrx_bus_agent)
 
     uartrx_bus_driver driver;
     //uartrx_sequencer seq;

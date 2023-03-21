@@ -1,5 +1,5 @@
 class iot_agent extends uvm_agent;
-    `uvm_component_utils(iot_agent);
+    `uvm_component_utils(iot_agent)
 
     typedef uvm_sequencer #(iot_transaction) iot_sequencer;
 

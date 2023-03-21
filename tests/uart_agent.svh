@@ -1,5 +1,5 @@
 class uart_agent extends uvm_agent;
-    `uvm_component_utils(uart_agent);
+    `uvm_component_utils(uart_agent)
 
     typedef uvm_sequencer #(uart_transaction) uart_sequencer;
 

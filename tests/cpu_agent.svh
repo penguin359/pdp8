@@ -1,5 +1,5 @@
 class cpu_agent extends uvm_agent;
-    `uvm_component_utils(cpu_agent);
+    `uvm_component_utils(cpu_agent)
 
     typedef uvm_sequencer #(cpu_transaction) cpu_sequencer;
 

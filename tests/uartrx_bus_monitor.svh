@@ -1,5 +1,5 @@
 class uartrx_bus_monitor extends uvm_monitor;
-    `uvm_component_utils(uartrx_bus_monitor);
+    `uvm_component_utils(uartrx_bus_monitor)
 
     virtual uartrx_bus_if.MONITOR vif;
 

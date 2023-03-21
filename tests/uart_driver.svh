@@ -1,5 +1,5 @@
 class uart_driver extends uvm_driver #(uart_transaction);
-    `uvm_component_utils(uart_driver);
+    `uvm_component_utils(uart_driver)
 
     uart_config uconfig;
 

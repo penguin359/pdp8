@@ -1,7 +1,7 @@
 `uvm_analysis_imp_decl(_out)
 
 class uarttx_scoreboard extends uvm_scoreboard;
-    `uvm_component_utils(uarttx_scoreboard);
+    `uvm_component_utils(uarttx_scoreboard)
 
     uvm_analysis_imp #(uart_transaction, uarttx_scoreboard) mon_imp;
     uvm_analysis_imp_out #(uart_transaction, uarttx_scoreboard) mon_imp_out;

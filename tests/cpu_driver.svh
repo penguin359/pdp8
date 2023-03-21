@@ -1,5 +1,5 @@
 class cpu_driver extends uvm_driver #(cpu_transaction);
-    `uvm_component_utils(cpu_driver);
+    `uvm_component_utils(cpu_driver)
 
     //cpu_config uconfig;
 

@@ -1,5 +1,5 @@
 class uart_config extends uvm_object;
-    `uvm_object_utils(uart_config);
+    `uvm_object_utils(uart_config)
 
     int baud = 9600;
     virtual uartrx_bus_if uartrx_if;

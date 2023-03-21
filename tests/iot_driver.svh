@@ -1,5 +1,5 @@
 class iot_driver extends uvm_driver #(iot_transaction);
-    `uvm_component_utils(iot_driver);
+    `uvm_component_utils(iot_driver)
 
     iot_config bus_config;
 

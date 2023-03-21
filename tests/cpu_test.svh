@@ -1,5 +1,5 @@
 class cpu_test extends uvm_test;
-    `uvm_component_utils(cpu_test);
+    `uvm_component_utils(cpu_test)
 
     cpu_env env;
 

@@ -1,5 +1,5 @@
 class cpu_scoreboard extends uvm_scoreboard;
-    `uvm_component_utils(cpu_scoreboard);
+    `uvm_component_utils(cpu_scoreboard)
 
     uvm_analysis_imp #(cpu_transaction, cpu_scoreboard) mon_imp;
 

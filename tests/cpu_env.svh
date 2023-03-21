@@ -1,5 +1,5 @@
 class cpu_env extends uvm_env;
-    `uvm_component_utils(cpu_env);
+    `uvm_component_utils(cpu_env)
 
     cpu_agent agent;
     iot_agent io3_agent;

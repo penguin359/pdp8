@@ -1,5 +1,5 @@
 class cpu_monitor extends uvm_monitor;
-    `uvm_component_utils(cpu_monitor);
+    `uvm_component_utils(cpu_monitor)
 
     virtual cpu_if.MONITOR vif;
 

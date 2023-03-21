@@ -1,5 +1,5 @@
 class iot_sequence extends uvm_sequence #(iot_transaction);
-    `uvm_object_utils(iot_sequence);
+    `uvm_object_utils(iot_sequence)
 
     function new(string name = "iot_sequence");
         super.new(name);
