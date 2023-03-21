@@ -197,15 +197,15 @@ class cpu_reference;
                         skip = 1'b1;
                         if(trans.read_data[SMA_BIT] == 1'b1) begin  // SPA
                             if(acc[11] == 1'b1)
-                                skip = 0'b1;
+                                skip = 1'b0;
                         end
                         if(trans.read_data[SZA_BIT] == 1'b1) begin  // SNA
                             if(acc[11] == 12'b0)
-                                skip = 0'b1;
+                                skip = 1'b0;
                         end
                         if(trans.read_data[SNL_BIT] == 1'b1) begin  // SZL
                             if(link == 1'b1)
-                                skip = 0'b1;
+                                skip = 1'b0;
                         end
                     end
                     if(skip)
