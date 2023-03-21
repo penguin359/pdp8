@@ -1,0 +1,23 @@
+package uart_testbench;
+    import uvm_pkg::*;
+
+    `include "uart_config.svh"
+    `include "uart_transaction.svh"
+    `include "uart_sequence.svh"
+    `include "uart_file_sequence.svh"
+    `include "uartrx_bus_driver.svh"
+    `include "uartrx_bus_monitor.svh"
+    `include "uartrx_bus_agent.svh"
+    `include "uarttx_bus_sequencer.svh"
+    `include "uarttx_bus_driver.svh"
+    `include "uarttx_bus_monitor.svh"
+    `include "uarttx_bus_agent.svh"
+    `include "uart_driver.svh"
+    `include "uart_monitor.svh"
+    `include "uart_agent.svh"
+    `include "uarttx_scoreboard.svh"
+    `include "uartrx_env.svh"
+    `include "uartrx_test.svh"
+    `include "uarttx_env.svh"
+    `include "uarttx_test.svh"
+endpackage: uart_testbench

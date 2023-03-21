@@ -41,16 +41,16 @@ module state(
     // 22 states
     //typedef enum {
     //    Shalt, Sread_instr, Sdecode_instr, Sread_indirect, Sexec_instr, Sexec_instr2
-    //} cpu_state_t;
-    localparam Shalt = 3'd0;
-    localparam Sread_instr = 3'd1;
-    localparam Sdecode_instr = 3'd2;
-    localparam Sread_indirect = 3'd3;
-    localparam Sexec_instr = 3'd4;
-    localparam Sexec_instr2 = 3'd5;
-    `define cpu_state_t reg [3:0]
-    `cpu_state_t current_state = Shalt;
-    `cpu_state_t next_state;
+    //} CPU_STATE_T;
+    localparam integer Shalt = 3'd0;
+    localparam integer Sread_instr = 3'd1;
+    localparam integer Sdecode_instr = 3'd2;
+    localparam integer Sread_indirect = 3'd3;
+    localparam integer Sexec_instr = 3'd4;
+    localparam integer Sexec_instr2 = 3'd5;
+    `define CPU_STATE_T reg [3:0]
+    `CPU_STATE_T current_state = Shalt;
+    `CPU_STATE_T next_state;
     //typedef wire [11:0] word;
     //word ac = 12'b0;
     //word ir = 12'b0;
@@ -60,14 +60,14 @@ module state(
     wire [11:0] ea = 12'b0;
     wire [11:0] pc = 12'b0;
 
-    localparam integer opcode_and = 3'b000;
-    localparam integer opcode_tad = 3'b001;
-    localparam integer opcode_isz = 3'b010;
-    localparam integer opcode_dca = 3'b011;
-    localparam integer opcode_jms = 3'b100;
-    localparam integer opcode_jmp = 3'b101;
-    localparam integer opcode_iot = 3'b110;
-    localparam integer opcode_opr = 3'b111;
+    localparam integer OpcodeAnd = 3'b000;
+    localparam integer OpcodeTad = 3'b001;
+    localparam integer OpcodeIsz = 3'b010;
+    localparam integer OpcodeDca = 3'b011;
+    localparam integer OpcodeJms = 3'b100;
+    localparam integer OpcodeJmp = 3'b101;
+    localparam integer OpcodeIot = 3'b110;
+    localparam integer OpcodeOpr = 3'b111;
 
     always @(posedge clk)
     begin
@@ -104,9 +104,9 @@ module state(
                     next_state <= Sdecode_instr;
             end
             Sdecode_instr: begin
-                if(opcode == opcode_opr)
+                if(opcode == OpcodeOpr)
                     next_state <= Sexec_instr;
-                else if(opcode == opcode_iot)
+                else if(opcode == OpcodeIot)
                     next_state <= Sexec_instr;
                 else if(indirect)
                     // Let mem_read drop to 1'b0
@@ -125,70 +125,72 @@ module state(
             end
             Sexec_instr: begin
                 case(opcode)
-                    opcode_and: begin
+                    OpcodeAnd: begin
                         sel_addr <= addr_ma;
                         sel_md <= md_data;
                         mem_read <= 1'b1;
                         if(mem_valid)
                                 next_state <= Sexec_instr2;
                     end
-                    opcode_tad: begin
+                    OpcodeTad: begin
                         sel_addr <= addr_ma;
                         sel_md <= md_data;
                         mem_read <= 1'b1;
                         if(mem_valid)
                                 next_state <= Sexec_instr2;
                     end
-                    opcode_isz: begin
+                    OpcodeIsz: begin
                         sel_addr <= addr_ma;
                         sel_md <= md_data1;
                         mem_read <= 1'b1;
                         if(mem_valid)
                                 next_state <= Sexec_instr2;
                     end
-                    opcode_dca: begin
+                    OpcodeDca: begin
                         sel_addr <= addr_ma;
                         sel_data <= data_ac;
                         mem_write <= 1'b1;
                         if(mem_valid)
                                 next_state <= Sexec_instr2;
                     end
-                    opcode_jms: begin
+                    OpcodeJms: begin
                         sel_addr <= addr_ma;
                         sel_data <= data_pc1;
                         mem_write <= 1'b1;
                         if(mem_valid)
                                 next_state <= Sexec_instr2;
                     end
-                    opcode_jmp: begin
+                    OpcodeJmp: begin
                         sel_pc <= pc_ma;
                         next_state <= Sread_instr;
                     end
-                    opcode_iot: begin
+                    OpcodeIot: begin
                         sel_ac <= ac_iot;
                         sel_pc <= pc_incr;
                         sel_skip <= skip_iot;
                         sel_iot <= iot_en;
                         next_state <= Sread_instr;
                     end
-                    opcode_opr: begin
+                    OpcodeOpr: begin
                         sel_ac <= ac_uc;
                         sel_pc <= pc_incr;
                         sel_skip <= skip_uc;
                         next_state <= Sread_instr;
                     end
-                    //default:
+                    default: begin
+                        next_state <= Shalt;
+                    end
                 endcase
             end
             Sexec_instr2: begin
                 sel_pc <= pc_incr;
                 next_state <= Sread_instr;
                 case(opcode)
-                    opcode_and:
+                    OpcodeAnd:
                         sel_ac <= ac_and_md;
-                    opcode_tad:
+                    OpcodeTad:
                         sel_ac <= ac_add_md;
-                    opcode_isz: begin
+                    OpcodeIsz: begin
                         sel_pc <= pc_none;
                         next_state <= current_state;
                         sel_addr <= addr_ma;
@@ -200,11 +202,11 @@ module state(
                             next_state <= Sread_instr;
                         end
                     end
-                    opcode_dca:
+                    OpcodeDca:
                         sel_ac <= ac_zero;
-                    opcode_jms:
+                    OpcodeJms:
                         sel_pc <= pc_ma1;
-                    //default:
+                    default: ;
                 endcase
             end
             default:

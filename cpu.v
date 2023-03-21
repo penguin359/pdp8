@@ -78,43 +78,43 @@ reg [11:0] ea;
 reg [11:0] pc = 0;
 reg skip;
 
-localparam z_bit = 7;
-localparam i_bit = 8;
+localparam integer z_bit = 7;
+localparam integer i_bit = 8;
 
 // OPR (111) uC bits
-localparam uc_group1_bit = 8;
-localparam uc_group2_bit = 0;
+localparam integer uc_group1_bit = 8;
+localparam integer uc_group2_bit = 0;
 
-localparam group1 = 2'd0;
-localparam group2 = 2'd1;
-localparam group3 = 2'd2;
-`define uc_group_t wire [1:0]
-`uc_group_t uc_group;
+localparam integer group1 = 2'd0;
+localparam integer group2 = 2'd1;
+localparam integer group3 = 2'd2;
+`define UC_GROUP_T wire [1:0]
+`UC_GROUP_T uc_group;
 
 // uC Group 1 bits
-localparam cla_bit = 7;
-localparam cll_bit = 6;
-localparam cma_bit = 5;
-localparam cml_bit = 4;
-localparam rar_bit = 3;
-localparam ral_bit = 2;
-localparam bsw_bit = 1;
-localparam iac_bit = 0;
+localparam integer cla_bit = 7;
+localparam integer cll_bit = 6;
+localparam integer cma_bit = 5;
+localparam integer cml_bit = 4;
+localparam integer rar_bit = 3;
+localparam integer ral_bit = 2;
+localparam integer bsw_bit = 1;
+localparam integer iac_bit = 0;
 
 // uC Group 2 bits
-//localparam cla_bit = 7;
-localparam sma_bit = 6;
-localparam sza_bit = 5;
-localparam snl_bit = 4;
-localparam and_bit = 3;
-localparam osr_bit = 2;
-localparam hlt_bit = 1;
+//localparam integer cla_bit = 7;
+localparam integer sma_bit = 6;
+localparam integer sza_bit = 5;
+localparam integer snl_bit = 4;
+localparam integer and_bit = 3;
+localparam integer osr_bit = 2;
+localparam integer hlt_bit = 1;
 
 // uC Group 3 bits
-//localparam cla_bit = 7;
-localparam mqa_bit = 6;
-localparam sca_bit = 5;
-localparam mql_bit = 4;
+//localparam integer cla_bit = 7;
+localparam integer mqa_bit = 6;
+localparam integer sca_bit = 5;
+localparam integer mql_bit = 4;
 // 3:1 Code bits
 
 // uC decoded signals
@@ -200,14 +200,14 @@ wire mem_read, mem_write;
     //process(posedge clk)
     //variable page : std_logic_vector(11 downto 7);
     //begin
-    //	if rising_edge(clk) then
-    //		if ir(z_bit) == 1'b1 then
-    //			page := pc(11 downto 7);
-    //		else
-    //			page := (others => 1'b0);
-    //		end if;
-    //		ea <= page & ir(6 downto 0);
-    //	end if;
+    //  if rising_edge(clk) then
+    //      if ir(z_bit) == 1'b1 then
+    //          page := pc(11 downto 7);
+    //      else
+    //          page := (others => 1'b0);
+    //      end if;
+    //      ea <= page & ir(6 downto 0);
+    //  end if;
     //end process;
     //always @(pc[11:7], ir[z_bit], ir[6:0])
     // TODO Is this the best way to emulate a VHDL variable?
@@ -319,7 +319,7 @@ wire mem_read, mem_write;
             3'b010: en_ral <= 1'b1;
             3'b011: en_rtl <= 1'b1;
             3'b001: en_bsw <= 1'b1;
-            //default:
+            default: ;
         endcase
     end
 
@@ -357,6 +357,10 @@ wire mem_read, mem_write;
                 uc_skip <= uc2_skip;
             end
             group3: begin
+                uc_link_ac <= link_ac;
+                uc_skip <= 1'b0;
+            end
+            default: begin
                 uc_link_ac <= link_ac;
                 uc_skip <= 1'b0;
             end

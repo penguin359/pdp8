@@ -6,7 +6,7 @@ module uarttx(
     output tx_ready,
     output tx);
 
-    wire [0:6] value;
+    wire [6:0] value;
     reg [31:0] counter = 0;
 
     reg [7:0] rxreg;
@@ -16,10 +16,10 @@ module uarttx(
 
     assign value = counter[31:25];
 
-    parameter baud = 10_000_000;
-    parameter clock_rate = 50_000_000;
+    parameter integer baud = 10_000_000;
+    parameter integer clock_rate = 50_000_000;
     //localparam time bit_time = 1s;
-    localparam tx_divider = clock_rate / baud;
+    localparam integer tx_divider = clock_rate / baud;
 
     reg [$clog2(tx_divider)-1:0] tx_counter;
     reg [11:0] shift_reg;

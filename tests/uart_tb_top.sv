@@ -3,29 +3,7 @@
 `include "uvm_macros.svh"
 
 `include "uart_if.svh"
-package uart_testbench;
-    import uvm_pkg::*;
-
-    `include "uart_config.svh"
-    `include "uart_transaction.svh"
-    `include "uart_sequence.svh"
-    `include "uart_file_sequence.svh"
-    `include "uartrx_bus_driver.svh"
-    `include "uartrx_bus_monitor.svh"
-    `include "uartrx_bus_agent.svh"
-    `include "uarttx_bus_sequencer.svh"
-    `include "uarttx_bus_driver.svh"
-    `include "uarttx_bus_monitor.svh"
-    `include "uarttx_bus_agent.svh"
-    `include "uart_driver.svh"
-    `include "uart_monitor.svh"
-    `include "uart_agent.svh"
-    `include "uarttx_scoreboard.svh"
-    `include "uartrx_env.svh"
-    `include "uartrx_test.svh"
-    `include "uarttx_env.svh"
-    `include "uarttx_test.svh"
-endpackage: uart_testbench
+`include "uart_testbench_pkg.svh"
 
 module uart_tb_top;
     import uvm_pkg::*;
@@ -33,23 +11,23 @@ module uart_tb_top;
 
     bit clk, nrst;
 
-    localparam time period = 20ns;
-    localparam longint clock_rate = 1s / period;
+    localparam time Period = 20ns;
+    localparam longint ClockRate = 1s / Period;
 
-    localparam int baud = 115200;
+    localparam int Baud = 115200;
 
-    always #(period/2) clk = ~clk;
+    always #(Period/2) clk = ~clk;
 
     initial begin
         nrst = 0;
         #(100ns) nrst = 1;
     end
 
-    uartrx_bus_if uartrx_if(clk, nrst);
-    uarttx_bus_if uarttx_if(clk, nrst);
+    uartrx_bus_if uartrx_if(.clk(clk), .nrst(nrst));
+    uarttx_bus_if uarttx_if(.clk(clk), .nrst(nrst));
     uart_if serial_if();
 
-    uarttx #(.clock_rate(clock_rate), .baud(baud))
+    uarttx #(.clock_rate(ClockRate), .baud(Baud))
     dut (
         .clk(uarttx_if.clk),
         .nrst(uarttx_if.nrst),
@@ -62,7 +40,7 @@ module uart_tb_top;
 
     initial begin
         uconfig = new;
-        uconfig.baud = baud;
+        uconfig.baud = Baud;
         uconfig.uartrx_if = uartrx_if;
         uconfig.uarttx_if = uarttx_if;
         uconfig.serial_if = serial_if;
