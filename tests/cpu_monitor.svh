@@ -16,11 +16,11 @@ class cpu_monitor extends uvm_monitor;
         virtual cpu_if vif_actual;
         super.build_phase(phase);
         //if(!uvm_config_db #(cpu_config)::get(this, "", "cpu_config", uconfig)) begin
-        //    `uvm_fatal("UART_MONITOR", "driver failed to get cpu configuration");
+        //    `uvm_fatal("UART_MONITOR", "driver failed to get cpu configuration")
         //end
         //vif = uconfig.serial_if;
         if(!uvm_config_db #(virtual cpu_if)::get(this, "", "cpu_if", vif_actual)) begin
-            `uvm_fatal("CPU_MONITOR", "failed to get cpu interface");
+            `uvm_fatal("CPU_MONITOR", "failed to get cpu interface")
         end
         vif = vif_actual;
         assert(vif != null);
@@ -45,9 +45,9 @@ class cpu_monitor extends uvm_monitor;
             trans.read_data = vif.monitor_cb.read_data;
             if(vif.monitor_cb.write_enable)
                 trans.set_write_data(vif.monitor_cb.write_data);
-            `uvm_info("CPU_MONITOR", $sformatf("Bus TXN: %s", trans.convert2string()), UVM_MEDIUM);
+            `uvm_info("CPU_MONITOR", $sformatf("Bus TXN: %s", trans.convert2string()), UVM_MEDIUM)
             port.write(trans);
-            //`uvm_info("CPU_MONITOR", $sformatf("Bus TXN: %p", trans), UVM_MEDIUM);
+            //`uvm_info("CPU_MONITOR", $sformatf("Bus TXN: %p", trans), UVM_MEDIUM)
             //trans.print();
         end
     endtask: run_phase

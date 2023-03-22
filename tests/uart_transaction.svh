@@ -1,7 +1,7 @@
 class uart_transaction extends uvm_sequence_item;
     rand bit [7:0] data;
 
-    function new(string name="uart_transaction");
+    function new(string name = "uart_transaction");
         super.new();
     endfunction
 

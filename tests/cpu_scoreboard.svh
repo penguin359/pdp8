@@ -23,7 +23,7 @@ class cpu_scoreboard extends uvm_scoreboard;
         //if(queue_in.size() == 0)
         //    `uvm_info("CPU_SCOREBOARD", "All bytes were transmitted", UVM_LOW)
         //else begin
-        //    `uvm_error("CPU_SCOREBOARD", $sformatf("ERROR: %d byte(s) were not seen in transmit", queue_in.size()));
+        //    `uvm_error("CPU_SCOREBOARD", $sformatf("ERROR: %d byte(s) were not seen in transmit", queue_in.size()))
         //end
     endfunction
 

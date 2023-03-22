@@ -19,8 +19,8 @@ module uartrx(
 
     //assign value = counter[31:25];
 
-    //localparam tx_divider = 4'd11;
-    //reg [$clog2(tx_divider)-1:0] tx_counter;
+    //localparam TxDivider = 4'd11;
+    //reg [$clog2(TxDivider)-1:0] tx_counter;
     //reg [11:0] shift_reg;
 
     //reg [3:0] bit_count;
@@ -43,9 +43,9 @@ module uartrx(
     //always @(posedge clk or posedge rst)
     //begin
     //    if(rst)
-    //        tx_counter <= tx_divider;
+    //        tx_counter <= TxDivider;
     //    else if(tx_counter == 0)
-    //        tx_counter <= tx_divider;
+    //        tx_counter <= TxDivider;
     //    else
     //        tx_counter <= tx_counter - 4'd1;
     //end

@@ -7,7 +7,7 @@ class uartrx_bus_monitor extends uvm_monitor;
 
     uvm_analysis_port #(uart_transaction) port;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uartrx_bus_monitor", uvm_component parent = null);
         super.new(name, parent);
         port = new("analysis_port", this);
     endfunction
@@ -15,7 +15,7 @@ class uartrx_bus_monitor extends uvm_monitor;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
-            `uvm_fatal("UARTRX_BUS_MONITOR", "driver failed to get uart configuration");
+            `uvm_fatal("UARTRX_BUS_MONITOR", "driver failed to get uart configuration")
         end
         vif = uconfig.uartrx_if;
     endfunction

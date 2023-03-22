@@ -19,7 +19,7 @@ class cpu_transaction extends uvm_sequence_item;
         OPR=OPCODE_OPR
     } opcode_t;
 
-    function new(string name="cpu_transaction");
+    function new(string name = "cpu_transaction");
         super.new();
         set_zero_page(1);
         set_indirect(0);

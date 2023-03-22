@@ -5,14 +5,14 @@ class uarttx_bus_driver extends uvm_driver #(uart_transaction);
 
     virtual uarttx_bus_if.DRIVER vif;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uarttx_bus_driver", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
-            `uvm_fatal("UARTTX_BUS_DRIVER", "driver failed to get uart configuration");
+            `uvm_fatal("UARTTX_BUS_DRIVER", "driver failed to get uart configuration")
         end
         vif = uconfig.uarttx_if;
     endfunction
@@ -24,7 +24,7 @@ class uarttx_bus_driver extends uvm_driver #(uart_transaction);
         forever begin
             uart_transaction trans;
             seq_item_port.get_next_item(trans);
-            `uvm_info("UARTTX_BUS_DRIVER", $sformatf("Sent char time=%0t char=%c value=0x%02h", $time, trans.data, trans.data), UVM_MEDIUM);
+            `uvm_info("UARTTX_BUS_DRIVER", $sformatf("Sent char time=%0t char=%c value=0x%02h", $time, trans.data, trans.data), UVM_MEDIUM)
             assert(vif != null);
             @(posedge vif.clk);
             vif.driver_cb.tx_load <= 1;

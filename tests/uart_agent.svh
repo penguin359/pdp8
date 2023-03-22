@@ -9,22 +9,22 @@ class uart_agent extends uvm_agent;
     uart_sequencer seq;
     uart_monitor monitor;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uart_agent", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
-            `uvm_fatal("UART_AGENT", "agent failed to get uart configuration");
+            `uvm_fatal("UART_AGENT", "agent failed to get uart configuration")
         end
 
         if(uconfig.active == UVM_ACTIVE) begin
             driver = uart_driver::type_id::create("driver", this);
             seq = uart_sequencer::type_id::create("sequencer", this);
-	    `uvm_info("UART_AGENT", "UART Agent Active", UVM_MEDIUM);
+	    `uvm_info("UART_AGENT", "UART Agent Active", UVM_MEDIUM)
         end else begin
-	    `uvm_info("UART_AGENT", "UART Agent Passive", UVM_MEDIUM);
+	    `uvm_info("UART_AGENT", "UART Agent Passive", UVM_MEDIUM)
         end
         monitor = uart_monitor::type_id::create("monitor", this);
     endfunction

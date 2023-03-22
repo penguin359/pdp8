@@ -5,7 +5,7 @@ class uartrx_bus_agent extends uvm_agent;
     //uartrx_sequencer seq;
     uartrx_bus_monitor monitor;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uartrx_bus_agent", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 

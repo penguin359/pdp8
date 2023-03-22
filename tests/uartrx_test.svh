@@ -3,7 +3,7 @@ class uartrx_test extends uvm_test;
 
     uartrx_env env;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uartrx_test", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 

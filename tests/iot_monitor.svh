@@ -15,7 +15,7 @@ class iot_monitor extends uvm_monitor;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(iot_config)::get(this, "", "iot_config", bus_config)) begin
-            `uvm_fatal("UART_MONITOR", "failed to get iot configuration");
+            `uvm_fatal("UART_MONITOR", "failed to get iot configuration")
         end
         vif = bus_config.iot_if;
 	assert(vif != null);
@@ -35,7 +35,7 @@ class iot_monitor extends uvm_monitor;
             txn.data_in = vif.monitor_cb.datain;
             txn.load = vif.monitor_cb.load;
             port.write(txn);
-            `uvm_info("IOT_MONITOR", $sformatf("I/O TXN: %s", txn.convert2string()), UVM_MEDIUM);
+            `uvm_info("IOT_MONITOR", $sformatf("I/O TXN: %s", txn.convert2string()), UVM_MEDIUM)
         end
     endtask: run_phase
 endclass: iot_monitor

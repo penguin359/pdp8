@@ -35,7 +35,7 @@ module cpu_tb_top;
     iot_if io3(.clk(clk), .nrst(nrst));
     iot_if io4(.clk(clk), .nrst(nrst));
 
-    cpu //#(.clock_rate(ClockRate), .baud(baud))
+    cpu //#(.ClockRate(ClockRate), .Baud(Baud))
     dut (
         .clk(vif.clk),
         .nrst(vif.nrst),

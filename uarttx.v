@@ -19,9 +19,9 @@ module uarttx(
     parameter integer Baud = 10_000_000;
     parameter integer ClockRate = 50_000_000;
     //localparam time BitTime = 1s;
-    localparam integer TxDivider = clock_rate / baud;
+    localparam integer TxDivider = ClockRate / Baud;
 
-    reg [$clog2(tx_divider)-1:0] tx_counter;
+    reg [$clog2(TxDivider)-1:0] tx_counter;
     reg [11:0] shift_reg;
 
     reg [3:0] bit_count;
@@ -44,9 +44,9 @@ module uarttx(
     always @(posedge clk or negedge nrst)
     begin
         if(!nrst)
-            tx_counter <= tx_divider;
+            tx_counter <= TxDivider;
         else if(tx_counter == 0)
-            tx_counter <= tx_divider;
+            tx_counter <= TxDivider;
         else
             tx_counter <= tx_counter - 4'd1;
     end

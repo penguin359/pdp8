@@ -7,7 +7,7 @@ class uarttx_bus_agent extends uvm_agent;
 
     //virtual uarttx_if vif;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uarttx_bus_agent", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 
@@ -19,7 +19,7 @@ class uarttx_bus_agent extends uvm_agent;
         //uvm_config_db #(virtual uarttx_if.DRIVER)::set(this, "driver", "vif", vif);
 
         //if(!uvm_config_db #(virtual uarttx_if)::get(this, "", "vif", vif)) begin
-        //    `uvm_fatal("UARTTX_BUS_AGENT", "driver failed to get virtual interface");
+        //    `uvm_fatal("UARTTX_BUS_AGENT", "driver failed to get virtual interface")
         //end
     endfunction
 

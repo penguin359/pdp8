@@ -7,7 +7,7 @@ class uart_driver extends uvm_driver #(uart_transaction);
 
     uvm_analysis_port #(uart_transaction) port;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uart_driver", uvm_component parent = null);
         super.new(name, parent);
         port = new("analysis_port", this);
     endfunction
@@ -15,7 +15,7 @@ class uart_driver extends uvm_driver #(uart_transaction);
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(uart_config)::get(this, "", "uart_config", uconfig)) begin
-            `uvm_fatal("UART_DRIVER", "driver failed to get uart configuration");
+            `uvm_fatal("UART_DRIVER", "driver failed to get uart configuration")
         end
         vif = uconfig.serial_if;
     endfunction
@@ -32,7 +32,7 @@ class uart_driver extends uvm_driver #(uart_transaction);
 	    logic [7:0] shift_reg;
 
             seq_item_port.get_next_item(trans);
-            `uvm_info("UART_DRIVER", $sformatf("RX Sent char time=%0t char=%c value=0x%02h", $time, trans.data, trans.data), UVM_MEDIUM);
+            `uvm_info("UART_DRIVER", $sformatf("RX Sent char time=%0t char=%c value=0x%02h", $time, trans.data, trans.data), UVM_MEDIUM)
             port.write(trans);
             shift_reg = trans.data;
             vif.rx = 1'b0;

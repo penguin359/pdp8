@@ -5,7 +5,7 @@ class cpu_driver extends uvm_driver #(cpu_transaction);
 
     virtual cpu_if.DRIVER vif;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "cpu_driver", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 
@@ -13,11 +13,11 @@ class cpu_driver extends uvm_driver #(cpu_transaction);
         virtual cpu_if vif_actual;
         super.build_phase(phase);
         //if(!uvm_config_db #(cpu_config)::get(this, "", "cpu_config", uconfig)) begin
-        //    `uvm_fatal("CPU_DRIVER", "driver failed to get cpu configuration");
+        //    `uvm_fatal("CPU_DRIVER", "driver failed to get cpu configuration")
         //end
         //vif = uconfig.cpu_if;
         if(!uvm_config_db #(virtual cpu_if)::get(this, "", "cpu_if", vif_actual)) begin
-            `uvm_fatal("CPU_DRIVER", "failed to get cpu interface");
+            `uvm_fatal("CPU_DRIVER", "failed to get cpu interface")
         end
         vif = vif_actual;
     endfunction
@@ -44,8 +44,8 @@ class cpu_driver extends uvm_driver #(cpu_transaction);
         forever begin
             cpu_transaction trans;
             seq_item_port.get_next_item(trans);
-            `uvm_info("CPU_DRIVER", $sformatf("Bus read time=%0t value=0x%03h", $time, trans.read_data), UVM_HIGH);
-            `uvm_info("CPU_DRIVER", $sformatf("Bus TXN: %s", trans.convert2string()), UVM_MEDIUM);
+            `uvm_info("CPU_DRIVER", $sformatf("Bus read time=%0t value=0x%03h", $time, trans.read_data), UVM_HIGH)
+            `uvm_info("CPU_DRIVER", $sformatf("Bus TXN: %s", trans.convert2string()), UVM_MEDIUM)
 
             wait(vif.driver_cb.mem_load == 1'b1);
             vif.driver_cb.read_data <= trans.read_data;

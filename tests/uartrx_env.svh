@@ -5,7 +5,7 @@ class uartrx_env extends uvm_env;
     uart_agent external_agent;
     uarttx_scoreboard sb;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uartrx_env", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 

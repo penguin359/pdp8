@@ -7,7 +7,7 @@ class uarttx_env extends uvm_env;
 
     //virtual uarttx_if vif;
 
-    function new(string name, uvm_component parent);
+    function new(string name = "uarttx_env", uvm_component parent = null);
         super.new(name, parent);
     endfunction
 
@@ -19,7 +19,7 @@ class uarttx_env extends uvm_env;
         //uvm_config_db #(virtual uarttx_if)::set(this, "agent", "vif", vif);
 
         //if(!uvm_config_db #(virtual uarttx_if)::get(this, "", "vif", vif)) begin
-        //    `uvm_fatal("UARTTX_ENV", "driver failed to get virtual interface");
+        //    `uvm_fatal("UARTTX_ENV", "driver failed to get virtual interface")
         //end
     endfunction
 

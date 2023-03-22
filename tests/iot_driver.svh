@@ -12,7 +12,7 @@ class iot_driver extends uvm_driver #(iot_transaction);
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(iot_config)::get(this, "", "iot_config", bus_config)) begin
-            `uvm_fatal("IOT_DRIVER", "failed to get iot configuration");
+            `uvm_fatal("IOT_DRIVER", "failed to get iot configuration")
         end
         vif = bus_config.iot_if;
     endfunction
@@ -29,8 +29,8 @@ class iot_driver extends uvm_driver #(iot_transaction);
         forever begin
             iot_transaction txn;
             seq_item_port.get_next_item(txn);
-            //`uvm_info("IOT_DRIVER", $sformatf("Bus read time=%0t value=0x%03h", $time, txn.read_data), UVM_HIGH);
-            `uvm_info("IOT_DRIVER", $sformatf("I/O TXN: %s", txn.convert2string()), UVM_MEDIUM);
+            //`uvm_info("IOT_DRIVER", $sformatf("Bus read time=%0t value=0x%03h", $time, txn.read_data), UVM_HIGH)
+            `uvm_info("IOT_DRIVER", $sformatf("I/O TXN: %s", txn.convert2string()), UVM_MEDIUM)
 
             wait(vif.driver_cb.clear == 1'b1 ||
                  vif.driver_cb.load == 1'b1);

@@ -27,7 +27,7 @@ module uart_tb_top;
     uarttx_bus_if uarttx_if(.clk(clk), .nrst(nrst));
     uart_if serial_if();
 
-    uarttx #(.clock_rate(ClockRate), .baud(Baud))
+    uarttx #(.ClockRate(ClockRate), .Baud(Baud))
     dut (
         .clk(uarttx_if.clk),
         .nrst(uarttx_if.nrst),

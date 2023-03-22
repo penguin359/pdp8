@@ -16,7 +16,7 @@ class iot_agent extends uvm_agent;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if(!uvm_config_db #(iot_config)::get(this, "", "iot_config", bus_config)) begin
-            `uvm_fatal("IOT_AGENT", "failed to get iot configuration");
+            `uvm_fatal("IOT_AGENT", "failed to get iot configuration")
         end
         uvm_config_db #(iot_config)::set(this, "driver", "iot_config", bus_config);
         uvm_config_db #(iot_config)::set(this, "monitor", "iot_config", bus_config);

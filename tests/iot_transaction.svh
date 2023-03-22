@@ -12,7 +12,7 @@ class iot_transaction extends uvm_sequence_item;
     bit load;
     bit [7:0] data_out;
 
-    function new(string name="iot_transaction");
+    function new(string name = "iot_transaction");
         super.new();
     endfunction
 
