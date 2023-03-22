@@ -53,7 +53,7 @@ module uart_tb_top;
     end
 
     initial begin
-        uvm_root root = uvm_root::get();
+        automatic uvm_root root = uvm_root::get();
         root.enable_print_topology = 1;
         root.finish_on_completion = 0;
 `ifdef UART_TX_TEST

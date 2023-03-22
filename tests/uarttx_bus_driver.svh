@@ -19,7 +19,7 @@ class uarttx_bus_driver extends uvm_driver #(uart_transaction);
 
     task run_phase(uvm_phase phase);
         super.run_phase(phase);
-        wait(vif.nrst == 1);
+        wait(vif.nrst === 1);
         #1
         forever begin
             uart_transaction trans;
@@ -30,9 +30,13 @@ class uarttx_bus_driver extends uvm_driver #(uart_transaction);
             vif.driver_cb.tx_load <= 1;
             vif.driver_cb.tx_data <= trans.data;
             @(posedge vif.clk);
+            if(vif.driver_cb.tx_ready === 1)
+                `uvm_warning("UARTTX_BUS_DRIVER", "TX still ready after load")
             vif.driver_cb.tx_load <= 0;
             vif.driver_cb.tx_data <= 0;
-            @(posedge vif.clk && vif.driver_cb.tx_ready == 1);
+            @(posedge vif.clk);
+            wait(vif.driver_cb.tx_ready === 0);
+            wait(vif.driver_cb.tx_ready === 1);
             seq_item_port.item_done();
         end
     endtask: run_phase
